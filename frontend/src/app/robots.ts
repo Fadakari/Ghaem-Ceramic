@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: 'https://pssgh.ir/sitemap.xml',
+    sitemap: 'https://bisansam.ir/sitemap.xml',
   };
 }

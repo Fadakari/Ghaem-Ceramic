@@ -1,126 +1,135 @@
-export interface SiteSetting {
+export interface CompanySetting {
   id?: number;
-  company_name_fa: string;
-  company_name_en: string;
+  company_name: string;
   tagline: string;
-  hero_badge: string;
+  established_year: string;
+  veterinary_code: string;
   hero_title: string;
   hero_subtitle: string;
-  about_title: string;
-  about_text_1: string;
-  about_text_2: string;
-  phone: string;
-  fax: string;
+  hero_badge: string;
+  hero_image: string;
+  phone_primary: string;
+  phone_sales: string;
+  phone_emergency: string;
   email: string;
-  website: string;
   address: string;
-  manager_name: string;
-  catalog_title: string;
-  catalog_url: string;
-  meta_title: string;
-  meta_description: string;
-  updated_at?: string;
+  working_hours: string;
+  annual_tonnage: string;
+  active_centers: string;
+  cold_chain_temp: string;
+  satisfaction_rate: string;
+  about_story: string;
+  about_vision: string;
+  about_image: string;
+  facility_image: string;
 }
 
-export interface KeyStat {
-  id?: number;
-  value: string;
-  label: string;
-  sublabel: string;
-  order: number;
-}
-
-export interface CeramicAdvantage {
-  id?: number;
-  title: string;
+export interface ProductCategory {
+  id: number;
+  name: string;
+  slug: string;
   description: string;
-  hardox_comparison: string;
-  icon_name: string;
+  icon: string;
+  order: number;
+  products_count?: number;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  slug: string;
+  category: number;
+  category_name?: string;
+  category_slug?: string;
+  animal_type: 'beef' | 'lamb' | 'camel' | 'poultry' | 'offal';
+  animal_type_display?: string;
+  cut_type: string;
+  temperature_state: 'chilled' | 'frozen';
+  temperature_state_display?: string;
+  packaging_type: 'map' | 'vacuum' | 'bulk_box' | 'carcass';
+  packaging_type_display?: string;
+  shelf_life: string;
+  weight_options: string;
+  suitable_for: string;
+  target_audience: string;
+  marbling_score: number;
+  tenderness_rating: number;
+  protein_per_100g: string;
+  fat_per_100g: string;
+  calories_per_100g: string;
+  description: string;
+  cooking_guide?: string;
+  storage_instructions: string;
+  image: string;
+  is_featured: boolean;
+  is_available: boolean;
   order: number;
 }
 
-export interface CeramicProductForm {
-  id?: number;
-  code: string;
-  name_fa: string;
-  name_en: string;
+export interface Service {
+  id: number;
+  title: string;
+  slug: string;
+  short_description: string;
+  full_description: string;
+  target_sector: string;
+  benefits: string;
+  icon: string;
+  order: number;
+}
+
+export interface QualityStandard {
+  id: number;
+  title: string;
+  authority: string;
+  license_number: string;
+  description: string;
+  badge_text: string;
+  order: number;
+}
+
+export interface Article {
+  id: number;
+  title: string;
+  slug: string;
   category: string;
-  short_desc: string;
-  full_desc: string;
-  dimensions: string;
-  applications: string;
-  industries: string;
+  summary: string;
+  content: string;
+  featured_image: string;
+  author: string;
+  author_role: string;
+  reading_time: string;
+  is_published: boolean;
+  published_at: string;
+}
+
+export interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
   order: number;
 }
 
-export interface TechnicalProperty {
+export interface ContactInquiry {
   id?: number;
-  name_fa: string;
-  name_en: string;
-  value: string;
-  standard_ref: string;
-  category: 'chemical' | 'physical' | 'mechanical';
-  order: number;
-}
-
-export interface ProductionStep {
-  id?: number;
-  step_number: number;
-  title: string;
-  headline: string;
-  description: string;
-  equipment: string;
-  order: number;
-}
-
-export interface InstallationMethod {
-  id?: number;
-  title: string;
-  subtitle: string;
-  description: string;
-  specifications: string;
-  order: number;
-}
-
-export interface IndustrySector {
-  id?: number;
-  title: string;
-  description: string;
-  equipments: string;
-  icon_name: string;
-  order: number;
-}
-
-export interface ProjectTestimonial {
-  id?: number;
-  client_name: string;
-  project_title: string;
-  quote: string;
-  result_highlight: string;
-  letter_number: string;
-  letter_date: string;
-  signer: string;
-  verified: boolean;
-  order: number;
+  full_name: string;
+  organization?: string;
+  phone: string;
+  email?: string;
+  inquiry_type: string;
+  estimated_tonnage?: string;
+  message: string;
+  created_at?: string;
 }
 
 export interface CompanyBundle {
-  settings: SiteSetting;
-  stats: KeyStat[];
-  advantages: CeramicAdvantage[];
-  products: CeramicProductForm[];
-  specs: TechnicalProperty[];
-  production_steps: ProductionStep[];
-  installation_methods: InstallationMethod[];
-  industries: IndustrySector[];
-  testimonials: ProjectTestimonial[];
-}
-
-export interface ContactFormData {
-  full_name: string;
-  company_name: string;
-  phone: string;
-  email: string;
-  subject: string;
-  message: string;
+  settings: CompanySetting;
+  categories: ProductCategory[];
+  featured_products: Product[];
+  products: Product[];
+  services: Service[];
+  standards: QualityStandard[];
+  articles: Article[];
+  faqs: FAQ[];
 }

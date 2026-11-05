@@ -1,208 +1,283 @@
 from django.db import models
 
-class SiteSetting(models.Model):
-    """تنظیمات کلی و اطلاعات اصلی وب‌سایت سرامیک صنعت قائم"""
-    company_name_fa = models.CharField(max_length=200, default="شرکت سرامیک صنعت قائم", verbose_name="نام شرکت (فارسی)")
-    company_name_en = models.CharField(max_length=200, default="Ghaem Ceramic Industry", verbose_name="نام شرکت (انگلیسی)")
-    tagline = models.CharField(max_length=300, default="تولیدکننده تخصصی قطعات و سرامیک‌های ضد سایش آلومینایی میکروبلورین", verbose_name="شعار یا معرفی کوتاه")
+
+class CompanySetting(models.Model):
+    """
+    تنظیمات هویتی و پایه‌ای شرکت بی‌سان سام یزد
+    """
+    company_name = models.CharField(max_length=200, default='شرکت بی‌سان سام یزد', verbose_name='نام شرکت')
+    tagline = models.CharField(
+        max_length=300,
+        default='زنجیره یکپارچه فرآوری صنعتی، کنترل بهداشتی و توزیع گوشت و فرآورده‌های پروتئینی',
+        verbose_name='شعار سازمانی'
+    )
+    established_year = models.CharField(max_length=20, default='۱۳۸۸', verbose_name='سال تأسیس')
+    veterinary_code = models.CharField(max_length=100, default='IR-VET-984210', verbose_name='کد پروانه بهداشتی دامپزشکی')
     
-    hero_badge = models.CharField(max_length=150, default="پیشگام بومی‌سازی پوشش‌های ضد سایش در صنایع سنگین کشور", verbose_name="نشان بالای هدر")
-    hero_title = models.CharField(max_length=250, default="پوشش‌های فوق‌مقاوم سرامیکی؛ پایان استهلاک و توقف خطوط تولید صنعتی", verbose_name="عنوان اصلی صفحه نخست")
-    hero_subtitle = models.TextField(default="جایگزین قطعی فولادهای هاردوکس با سختی ۹ موهس، مقاومت حرارتی تا ۸۰۰ درجه و حداقل ۴ برابر طول عمر بیشتر در مواجهه با شدیدترین سایش‌ها و محیط‌های خورنده شیمیایی.", verbose_name="زیرعنوان هدر")
+    # Hero Section
+    hero_title = models.CharField(
+        max_length=250,
+        default='تامین مستقیم و تخصصی گوشت گرم و فرآورده‌های پروتئینی با بالاترین استاندارد بهداشتی کشور',
+        verbose_name='تیتر بخش هیرو'
+    )
+    hero_subtitle = models.TextField(
+        default='تأمین پایدار انواع گوشت گرم گوساله، گوسفندی، شتر ممتاز یزد و ماکیان؛ پایش برخط زنجیره سرمایش و توزیع روزانه برای هتل‌ها، رستوران‌ها، سازمان‌ها و خانوار.',
+        verbose_name='زیرتیتر بخش هیرو'
+    )
+    hero_badge = models.CharField(
+        max_length=150,
+        default='کشتارگاه صنعتی دارای رتبه کیفی A+ و نظارت مقیم سازمان دامپزشکی',
+        verbose_name='مدال/بج هیرو'
+    )
+    hero_image = models.ImageField(upload_to='hero/', default='hero/hero-craft-meat.jpg', verbose_name='تصویر بخش هیرو')
     
-    about_title = models.CharField(max_length=250, default="بیش از یک دهه نوآوری و مهندسی مواد پیشرفته در صنایع سنگین", verbose_name="عنوان درباره ما")
-    about_text_1 = models.TextField(default="شرکت سرامیک صنعت قائم از سال ۱۳۹۰ به عنوان تخصصی‌ترین واحد مشاوره، طراحی، تولید، تأمین و نصب سرامیک‌های ضد سایش آلومینایی در کشور فعالیت خود را آغاز نموده است.", verbose_name="متن درباره ما - بخش اول")
-    about_text_2 = models.TextField(default="همواره در صنایع بزرگ نظیر فولاد، سیمان، مس و پتروشیمی، سایش و خوردگی مداوم ماشین‌آلات هزینه‌های گزافی به واسطه توقف‌های مکرر خط تولید تحمیل می‌کند. استفاده از فلزات ضد سایش مانند هاردوکس به دلیل ضعف در برابر حرارت، اسیدها و مواد خورنده پاسخگوی نیاز نیست. سرامیک‌های آلومینایی قائم با تکیه بر فرمولاسیون نوین و پخت در کوره تونلی ۱۶۰۰ درجه، جایگزین مطمئنی است که طول عمر تجهیزات را چند برابر افزایش می‌دهد.", verbose_name="متن درباره ما - بخش دوم")
+    # Contact & Location
+    phone_primary = models.CharField(max_length=50, default='035-38200000', verbose_name='تلفن مرکزی')
+    phone_sales = models.CharField(max_length=50, default='035-38200001', verbose_name='تلفن واحد بازرگانی و فروش')
+    phone_emergency = models.CharField(max_length=50, default='09130000000', verbose_name='خط مستقیم پشتیبانی و پیگیری')
+    email = models.EmailField(default='info@bisansam.ir', verbose_name='ایمیل رسمی')
+    address = models.CharField(
+        max_length=300,
+        default='یزد، شهرک صنعتی یزد، بلوار کارگر، خیابان صنایع غذایی، مجتمع فرآوری گوشت بی‌سان سام یزد',
+        verbose_name='آدرس دفتر و کارخانه'
+    )
+    working_hours = models.CharField(
+        max_length=150,
+        default='شنبه تا چهارشنبه: ۷:۰۰ الی ۱۶:۰۰ | پنج‌شنبه: ۷:۰۰ الی ۱۳:۰۰ (توزیع شبانه‌روزی)',
+        verbose_name='ساعات کاری'
+    )
     
-    phone = models.CharField(max_length=50, default="035-37301340", verbose_name="تلفن تماس")
-    fax = models.CharField(max_length=50, default="035-37301320", verbose_name="فکس")
-    email = models.EmailField(default="sales.csgh@gmail.com", verbose_name="پست الکترونیک")
-    website = models.CharField(max_length=100, default="www.pssgh.ir", verbose_name="آدرس وب‌سایت")
-    address = models.CharField(max_length=300, default="یزد، بلوار پاسداران، مجتمع مهران، طبقه ۳، واحد D31", verbose_name="نشانی دفتر مرکزی")
-    manager_name = models.CharField(max_length=100, default="جناب آقای مهندس زارع", verbose_name="مدیریت شرکت")
-    
-    catalog_title = models.CharField(max_length=150, default="کاتالوگ جامع مهندسی سرامیک صنعت قائم", verbose_name="عنوان کاتالوگ")
-    catalog_url = models.CharField(max_length=300, blank=True, default="", verbose_name="لینک مستقیم دانلود کاتالوگ")
-    
-    meta_title = models.CharField(max_length=250, default="شرکت سرامیک صنعت قائم | سرامیک‌های ضد سایش آلومینا و جایگزین هاردوکس", verbose_name="عنوان سئو (Title)")
-    meta_description = models.TextField(default="تولید تخصصی انواع لاینرها، تایل‌ها، موزاییک‌های شش ضلعی و قطعات سرامیکی ضد سایش آلومینایی با سختی ۹ موهس برای شوت‌ها، هاپرها و لوله‌های صنایع فولاد، مس، سیمان و پتروشیمی.", verbose_name="توضیحات سئو (Description)")
-    
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ آخرین بروزرسانی")
+    # Stats
+    annual_tonnage = models.CharField(max_length=50, default='۱۲,۰۰۰+ تن', verbose_name='ظرفیت تامین سالانه')
+    active_centers = models.CharField(max_length=50, default='۱۸۰+ مرکز', verbose_name='مراکز طرف قرارداد فعال')
+    cold_chain_temp = models.CharField(max_length=50, default='۰ تا ۲+ درجه', verbose_name='دمای پایش مداوم زنجیره سرد')
+    satisfaction_rate = models.CharField(max_length=50, default='۹۹.۴٪', verbose_name='شاخص رضایت مشتریان')
+
+    # About Content
+    about_story = models.TextField(
+        default='شرکت بی‌سان سام یزد به عنوان یکی از پیشگامان صنعت فرآوری بهداشتی دام و طیور در مرکز کشور، با بهره‌گیری از خطوط کشتارگاهی مکانیزه، سالن‌های قطعه‌بندی تمام‌استیل، سردخانه‌های آمونیاکی مدرن و ناوگان اختصاصی مجهز به تله‌متری دما، زنجیره تامین مطمئن، حلال و بهداشتی را در سراسر کشور فراهم آورده است.',
+        verbose_name='متن درباره ما'
+    )
+    about_vision = models.TextField(
+        default='تضمین سلامت پایدار جامعه با عرضه فرآورده‌های پروتئینی فاقد هرگونه نگهدارنده، اصلاح نژاد بومی و حفظ بالاترین رتبه‌های استاندارد بهداشتی بین‌المللی.',
+        verbose_name='چشم‌انداز و مأموریت'
+    )
+    about_image = models.ImageField(upload_to='facilities/', default='facilities/livestock-ranch.jpg', verbose_name='تصویر درباره ما')
+    facility_image = models.ImageField(upload_to='facilities/', default='facilities/cold-chain-facility.jpg', verbose_name='تصویر تاسیسات')
 
     class Meta:
-        verbose_name = "تنظیمات وب‌سایت و متون اصلی"
-        verbose_name_plural = "تنظیمات وب‌سایت و متون اصلی"
+        verbose_name = 'تنظیمات شرکت و سایت'
+        verbose_name_plural = 'تنظیمات شرکت و سایت'
 
     def __str__(self):
-        return self.company_name_fa
+        return self.company_name
 
 
-class KeyStat(models.Model):
-    """آمارهای کلیدی جهت جلب اعتماد و نمایش در بخش آمار و ارقام"""
-    value = models.CharField(max_length=50, verbose_name="مقدار / عدد شاخص (مثلاً +۴x یا ۹۹.۲٪)")
-    label = models.CharField(max_length=150, verbose_name="عنوان شاخص")
-    sublabel = models.CharField(max_length=150, blank=True, default="", verbose_name="توضیح تکمیلی کوتاه")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+class ProductCategory(models.Model):
+    """
+    دسته‌بندی‌های تخصصی فرآورده‌های دامی و پروتئینی
+    """
+    name = models.CharField(max_length=150, verbose_name='نام دسته‌بندی')
+    slug = models.SlugField(max_length=150, unique=True, allow_unicode=True, verbose_name='اسلاگ URL')
+    description = models.TextField(blank=True, verbose_name='توضیحات کوتاه')
+    icon = models.CharField(max_length=50, default='meat', verbose_name='آیکون کلیدی')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
 
     class Meta:
-        verbose_name = "شاخص و آمار کلیدی"
-        verbose_name_plural = "شاخص‌ها و آمارهای کلیدی"
-        ordering = ['order']
+        ordering = ['order', 'id']
+        verbose_name = 'دسته‌بندی محصول'
+        verbose_name_plural = 'دسته‌بندی‌های محصولات'
 
     def __str__(self):
-        return f"{self.label}: {self.value}"
+        return self.name
 
 
-class CeramicAdvantage(models.Model):
-    """مزایای رقابتی سرامیک ضد سایش نسبت به فلزات مانند هاردوکس"""
-    title = models.CharField(max_length=200, verbose_name="عنوان مزیت")
-    description = models.TextField(verbose_name="شرح مهندسی و مزیت")
-    hardox_comparison = models.TextField(blank=True, default="", verbose_name="مقایسه با فلزات ضد سایش و هاردوکس")
-    icon_name = models.CharField(max_length=50, default="ShieldCheck", verbose_name="نام آیکون")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
-
-    class Meta:
-        verbose_name = "مزیت رقابتی و ویژگی برتر"
-        verbose_name_plural = "مزایای رقابتی سرامیک نسبت به هاردوکس"
-        ordering = ['order']
-
-    def __str__(self):
-        return self.title
-
-
-class CeramicProductForm(models.Model):
-    """انواع اشکال و قطعات سرامیکی (لاینر، موزاییک، لاینر لوله، تیغه و...)"""
-    code = models.CharField(max_length=50, verbose_name="کد قطعه (مثلاً PARY WE-AT)")
-    name_fa = models.CharField(max_length=150, verbose_name="نام فارسی قطعه")
-    name_en = models.CharField(max_length=150, verbose_name="نام انگلیسی قطعه")
-    category = models.CharField(max_length=100, default="قطعات استاندارد ضد سایش", verbose_name="دسته‌بندی")
-    short_desc = models.CharField(max_length=300, verbose_name="خلاصه کاربرد")
-    full_desc = models.TextField(verbose_name="توضیحات فنی و مهندسی کامل")
-    dimensions = models.TextField(verbose_name="ابعاد و اندازه‌های در دسترس (Available Sizes)")
-    applications = models.TextField(verbose_name="تجهیزات و کاربردهای رایج")
-    industries = models.CharField(max_length=300, verbose_name="صنایع هدف")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
-
-    class Meta:
-        verbose_name = "نوع قطعه و فرم سرامیکی"
-        verbose_name_plural = "اشکال و فرم‌های سرامیک‌های ضد سایش"
-        ordering = ['order']
-
-    def __str__(self):
-        return f"{self.code} - {self.name_fa}"
-
-
-class TechnicalProperty(models.Model):
-    """مشخصات فنی و خواص فیزیکی و شیمیایی (آنالیز آزمایشگاهی)"""
-    CATEGORY_CHOICES = [
-        ('chemical', 'خواص شیمیایی'),
-        ('physical', 'خواص فیزیکی'),
-        ('mechanical', 'خواص مکانیکی و مقاومت'),
+class Product(models.Model):
+    """
+    مدل اصلی محصولات و برش‌های تخصصی گوشت
+    """
+    ANIMAL_CHOICES = [
+        ('beef', 'گوساله نر پرواری'),
+        ('lamb', 'گوسفند و بره کشتار روز'),
+        ('camel', 'شتر درجه یک کویر یزد'),
+        ('poultry', 'طیور و ماکیان تازه'),
+        ('offal', 'آلایش خوراکی استریل'),
     ]
-    name_fa = models.CharField(max_length=150, verbose_name="نام پارامتر (فارسی)")
-    name_en = models.CharField(max_length=150, verbose_name="نام پارامتر (انگلیسی)")
-    value = models.CharField(max_length=100, verbose_name="مقدار استاندارد")
-    standard_ref = models.CharField(max_length=100, blank=True, default="", verbose_name="استاندارد مرجع یا روش آزمون")
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='physical', verbose_name="دسته بندی")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+
+    TEMP_CHOICES = [
+        ('chilled', 'گرم تازه (۰ تا ۴ درجه سانتی‌گراد)'),
+        ('frozen', 'منجمد فوق‌سریع IQF (منفی ۱۸ درجه)'),
+    ]
+
+    PACKAGING_CHOICES = [
+        ('map', 'بسته‌بندی اتمسفر اصلاح‌شده (MAP)'),
+        ('vacuum', 'وکیوم ترموفرمینگ (Skin Pack)'),
+        ('bulk_box', 'کارتن بهداشتی شرینک عمده'),
+        ('carcass', 'لاشه کامل آویز با پلاک رهگیری دامپزشکی'),
+    ]
+
+    name = models.CharField(max_length=200, verbose_name='نام تجاری محصول')
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True, verbose_name='اسلاگ URL')
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products', verbose_name='دسته‌بندی')
+    
+    animal_type = models.CharField(max_length=50, choices=ANIMAL_CHOICES, default='beef', verbose_name='نوع دام/طیور')
+    cut_type = models.CharField(max_length=100, verbose_name='نوع قطعه/برش')
+    temperature_state = models.CharField(max_length=50, choices=TEMP_CHOICES, default='chilled', verbose_name='وضعیت برودتی')
+    packaging_type = models.CharField(max_length=50, choices=PACKAGING_CHOICES, default='map', verbose_name='شیوه بسته‌بندی')
+    
+    shelf_life = models.CharField(max_length=150, verbose_name='ماندگاری بهداشتی')
+    weight_options = models.CharField(max_length=200, verbose_name='اوزان قابل عرضه')
+    suitable_for = models.CharField(max_length=250, verbose_name='مناسب برای پخت')
+    target_audience = models.CharField(max_length=200, default='خانوار، هتل‌ها و رستوران‌ها (HoReCa)، سازمان‌ها', verbose_name='گروه هدف')
+    
+    # Organoleptic & Quality Scores
+    marbling_score = models.PositiveSmallIntegerField(default=4, verbose_name='امتیاز ماربلینگ (۱ تا ۵)')
+    tenderness_rating = models.PositiveSmallIntegerField(default=5, verbose_name='شاخص نرمی و لطافت بافت (۱ تا ۵)')
+    
+    # Nutritional Info (per 100g)
+    protein_per_100g = models.CharField(max_length=50, default='۲۲.۴ گرم', verbose_name='میزان پروتئین (در ۱۰۰ گرم)')
+    fat_per_100g = models.CharField(max_length=50, default='۴.۲ گرم', verbose_name='میزان چربی (در ۱۰۰ گرم)')
+    calories_per_100g = models.CharField(max_length=50, default='۱۴۲ کیلوکالری', verbose_name='کالری (در ۱۰۰ گرم)')
+    
+    # Descriptions
+    description = models.TextField(verbose_name='توضیحات مشخصات و ویژگی‌های بافت')
+    cooking_guide = models.TextField(blank=True, verbose_name='دستور پخت و توصیه سرآشپز')
+    storage_instructions = models.TextField(
+        default='در دمای ۰ الی ۴ درجه سانتی‌گراد درون یخچال یا منفی ۱۸ درجه در فریزر نگهداری شود. پیش از مصرف در یخچال یخ‌زدایی گردد.',
+        verbose_name='دستورالعمل نگهداری'
+    )
+    
+    image = models.ImageField(upload_to='products/', default='products/beef-sirloin.jpg', verbose_name='تصویر محصول')
+    
+    is_featured = models.BooleanField(default=True, verbose_name='نمایش در کاتالوگ منتخب صفحه اصلی')
+    is_available = models.BooleanField(default=True, verbose_name='موجود در خط توزیع')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
 
     class Meta:
-        verbose_name = "مشخصه فنی و آزمایشی"
-        verbose_name_plural = "مشخصات فنی و آزمایشگاهی سرامیک‌ها"
-        ordering = ['order']
+        ordering = ['order', 'id']
+        verbose_name = 'محصول پروتئینی'
+        verbose_name_plural = 'محصولات پروتئینی'
 
     def __str__(self):
-        return f"{self.name_fa} ({self.value})"
+        return f"{self.name} ({self.get_animal_type_display()})"
 
 
-class ProductionStep(models.Model):
-    """مراحل خط تولید پیشرفته (فرآیند دانش‌بنیان)"""
-    step_number = models.PositiveIntegerField(verbose_name="شماره مرحله")
-    title = models.CharField(max_length=150, verbose_name="عنوان مرحله")
-    headline = models.CharField(max_length=200, verbose_name="تیتر برجسته مرحله")
-    description = models.TextField(verbose_name="شرح فرآیند و کنترل کیفیت")
-    equipment = models.CharField(max_length=150, blank=True, default="", verbose_name="تجهیزات و ماشین‌آلات کلیدی")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
-
-    class Meta:
-        verbose_name = "مرحله خط تولید"
-        verbose_name_plural = "مراحل فرآیند تولید و کنترل کیفی"
-        ordering = ['order', 'step_number']
-
-    def __str__(self):
-        return f"مرحله {self.step_number}: {self.title}"
-
-
-class InstallationMethod(models.Model):
-    """روش‌های نصب تخصصی سرامیک‌ها (جوش، چسب، ترکیبی)"""
-    title = models.CharField(max_length=150, verbose_name="عنوان روش نصب")
-    subtitle = models.CharField(max_length=200, verbose_name="تجهیزات و محل‌های کاربرد")
-    description = models.TextField(verbose_name="شرح نحوه اجرا")
-    specifications = models.TextField(verbose_name="نکات کلیدی، دما، زمان گیرش و شرایط سطح")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+class Service(models.Model):
+    """
+    خدمات B2B، تامین سازمانی و امکانات کشتارگاهی
+    """
+    title = models.CharField(max_length=200, verbose_name='عنوان خدمت')
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True, verbose_name='اسلاگ URL')
+    short_description = models.TextField(verbose_name='توضیح کوتاه')
+    full_description = models.TextField(verbose_name='شرح کامل خدمت سازمانی')
+    target_sector = models.CharField(max_length=200, verbose_name='بخش‌های هدف (HoReCa، بیمارستان‌ها و...)')
+    benefits = models.TextField(help_text='ویژگی‌ها با خط تیره (-) جدا شوند', verbose_name='مزایای کلیدی')
+    icon = models.CharField(max_length=50, default='truck', verbose_name='آیکون')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
 
     class Meta:
-        verbose_name = "دستورالعمل و روش نصب"
-        verbose_name_plural = "دستورالعمل‌ها و روش‌های نصب مهندسی"
-        ordering = ['order']
+        ordering = ['order', 'id']
+        verbose_name = 'خدمت سازمانی'
+        verbose_name_plural = 'خدمات سازمانی'
 
     def __str__(self):
         return self.title
 
 
-class IndustrySector(models.Model):
-    """صنایع هدف تحت پوشش"""
-    title = models.CharField(max_length=150, verbose_name="نام صنعت")
-    description = models.TextField(verbose_name="شرح نقاط سایش و راهکار سرامیک")
-    equipments = models.TextField(verbose_name="تجهیزات هدف (شوت، هاپر، زانویی و...)")
-    icon_name = models.CharField(max_length=50, default="Factory", verbose_name="نام آیکون")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+class QualityStandard(models.Model):
+    """
+    استانداردها، گواهینامه‌ها و تاییدیه‌های بهداشتی
+    """
+    title = models.CharField(max_length=200, verbose_name='عنوان استاندارد/گواهینامه')
+    authority = models.CharField(max_length=200, verbose_name='مرجع صادرکننده')
+    license_number = models.CharField(max_length=100, verbose_name='شماره ثبت / شناسه پروانه')
+    description = models.TextField(verbose_name='شرح الزامات بهداشتی')
+    badge_text = models.CharField(max_length=100, verbose_name='متن نشان اعتباری')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب')
 
     class Meta:
-        verbose_name = "صنعت هدف"
-        verbose_name_plural = "صنایع و کاربردهای صنعتی"
-        ordering = ['order']
+        ordering = ['order', 'id']
+        verbose_name = 'استاندارد و گواهینامه'
+        verbose_name_plural = 'استانداردها و گواهینامه‌ها'
 
     def __str__(self):
         return self.title
 
 
-class ProjectTestimonial(models.Model):
-    """گواهی‌های رسمی حسن انجام کار و پروژه‌های اجرا شده"""
-    client_name = models.CharField(max_length=200, verbose_name="نام کارفرما / مجتمع صنعتی")
-    project_title = models.CharField(max_length=200, verbose_name="عنوان پروژه و بخش تجهیز شده")
-    quote = models.TextField(verbose_name="متن گواهی یا نتیجه عملکرد")
-    result_highlight = models.CharField(max_length=200, verbose_name="نتیجه برجسته (مثلاً: ۵ برابر طول عمر نسبت به هاردوکس)")
-    letter_number = models.CharField(max_length=100, blank=True, default="", verbose_name="شماره نامه رسمی")
-    letter_date = models.CharField(max_length=50, blank=True, default="", verbose_name="تاریخ نامه")
-    signer = models.CharField(max_length=150, blank=True, default="", verbose_name="مقام امضاکننده")
-    verified = models.BooleanField(default=True, verbose_name="دارای تأییدیه رسمی")
-    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+class Article(models.Model):
+    """
+    مقالات علمی، راهنمای سلامت گوشت و دانش پروتئین
+    """
+    title = models.CharField(max_length=250, verbose_name='عنوان مقاله')
+    slug = models.SlugField(max_length=250, unique=True, allow_unicode=True, verbose_name='اسلاگ URL')
+    category = models.CharField(max_length=100, verbose_name='دسته‌بندی مقاله')
+    summary = models.TextField(verbose_name='خلاصه مقاله (متا دیسکریپشن)')
+    content = models.TextField(verbose_name='متن کامل مقاله')
+    featured_image = models.ImageField(upload_to='articles/', default='articles/fresh-meat-guide.jpg', verbose_name='تصویر شاخص')
+    author = models.CharField(max_length=150, default='دکتر ناظر کنترل کیفی دامپزشکی', verbose_name='نویسنده')
+    author_role = models.CharField(max_length=150, default='متخصص بهداشت مواد غذایی و فرآورده‌های دامی', verbose_name='سمت نویسنده')
+    reading_time = models.CharField(max_length=50, default='۵ دقیقه', verbose_name='مدت زمان مطالعه')
+    is_published = models.BooleanField(default=True, verbose_name='منتشر شده')
+    published_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ انتشار')
 
     class Meta:
-        verbose_name = "گواهی حسن انجام کار و پروژه"
-        verbose_name_plural = "گواهی‌های حسن انجام کار و پروژه‌ها"
-        ordering = ['order']
+        ordering = ['-published_at']
+        verbose_name = 'مقاله'
+        verbose_name_plural = 'مقالات و دانشنامه'
 
     def __str__(self):
-        return f"{self.client_name} - {self.result_highlight}"
+        return self.title
+
+
+class FAQ(models.Model):
+    """
+    پرسش‌های متداول مشتریان خانگی و خریداران عمده سازمانی
+    """
+    question = models.CharField(max_length=300, verbose_name='پرسش')
+    answer = models.TextField(verbose_name='پاسخ تخصصی')
+    category = models.CharField(max_length=100, default='تامین عمده و بهداشت', verbose_name='دسته‌بندی پرسش')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب')
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'پرسش متداول'
+        verbose_name_plural = 'پرسش‌های متداول'
+
+    def __str__(self):
+        return self.question
 
 
 class ContactInquiry(models.Model):
-    """پیام‌ها و درخواست‌های مشاوره فنی ثبت شده توسط مخاطبان و مدیران کارخانجات"""
-    full_name = models.CharField(max_length=150, verbose_name="نام و نام خانوادگی")
-    company_name = models.CharField(max_length=150, blank=True, default="", verbose_name="شرکت یا واحد صنعتی")
-    phone = models.CharField(max_length=50, verbose_name="شماره تماس")
-    email = models.EmailField(blank=True, default="", verbose_name="پست الکترونیک")
-    subject = models.CharField(max_length=200, verbose_name="موضوع استعلام یا مشاوره")
-    message = models.TextField(verbose_name="متن پیام و شرایط پروژه")
-    is_read = models.BooleanField(default=False, verbose_name="بررسی شده توسط کارفرما")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت درخواست")
+    """
+    استعلام‌های تامین عمده و پیام‌های ارتباطی و پشتیبانی
+    """
+    INQUIRY_TYPES = [
+        ('wholesale_supply', 'تامین عمده ارگان‌ها و صنایع غذایی'),
+        ('horeca_contract', 'قرارداد مستمر هتل‌ها، رستوران‌ها و کترینگ‌ها'),
+        ('private_label', 'درخواست بسته‌بندی سفارشی (Private Label)'),
+        ('veterinary_support', 'استعلام پروانه‌های بهداشتی و آزمایشگاهی'),
+        ('general', 'سایر موارد و پشتیبانی'),
+    ]
+
+    full_name = models.CharField(max_length=150, verbose_name='نام و نام خانوادگی')
+    organization = models.CharField(max_length=200, blank=True, verbose_name='نام سازمان / رستوران / واحد تجاری')
+    phone = models.CharField(max_length=50, verbose_name='شماره تماس')
+    email = models.EmailField(blank=True, verbose_name='ایمیل')
+    inquiry_type = models.CharField(max_length=60, choices=INQUIRY_TYPES, default='wholesale_supply', verbose_name='نوع استعلام')
+    estimated_tonnage = models.CharField(
+        max_length=100,
+        blank=True,
+        default='حجم هفتگی ۱ الی ۵ تن',
+        verbose_name='حجم سفارش یا تناژ درخواستی'
+    )
+    message = models.TextField(verbose_name='متن پیام و جزئیات نیاز')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='زمان ثبت')
+    is_handled = models.BooleanField(default=False, verbose_name='بررسی و پیگیری شده توسط واحد فروش')
 
     class Meta:
-        verbose_name = "درخواست مشاوره و پیام تماس"
-        verbose_name_plural = "درخواست‌های مشاوره و پیام‌های تماس"
         ordering = ['-created_at']
+        verbose_name = 'استعلام و پیام تماس'
+        verbose_name_plural = 'استعلام‌ها و پیام‌های تماس'
 
     def __str__(self):
-        return f"{self.full_name} ({self.company_name or 'شخصی'}) - {self.subject}"
+        return f"{self.full_name} - {self.get_inquiry_type_display()} ({self.created_at.strftime('%Y-%m-%d')})"

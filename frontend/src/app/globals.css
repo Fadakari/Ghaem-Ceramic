@@ -33,19 +33,22 @@
 }
 
 :root {
-  --primary-orange: #ff5500;
-  --primary-orange-hover: #e04a00;
-  --primary-orange-light: #fff3ec;
-  --accent-amber: #f59e0b;
-  --navy-dark: #0b1324;
-  --navy-surface: #111c33;
-  --slate-dark: #0f172a;
-  --slate-body: #334155;
-  --border-subtle: #e2e8f0;
+  --meat-oxblood: #9f1239;
+  --meat-oxblood-dark: #881337;
+  --meat-oxblood-light: #be123c;
+  --pasture-dark: #14532d;
+  --pasture-moss: #166534;
+  --cold-ice: #0284c7;
+  --cold-cyan: #0ea5e9;
+  --butcher-dark: #121316;
+  --butcher-charcoal: #1c1d22;
+  --surface-bone: #faf8f5;
+  --surface-parchment: #f4efe6;
+  --border-bone: #e5dfd5;
 }
 
 * {
-  font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   box-sizing: border-box;
 }
 
@@ -58,8 +61,8 @@ html {
 }
 
 body {
-  background-color: #fbfcfe;
-  color: #1e293b;
+  background-color: var(--surface-bone);
+  color: #1f2937;
   overflow-x: hidden;
   max-width: 100vw;
   width: 100%;
@@ -68,46 +71,156 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Bright & glossy orange styling utilities */
-.btn-vibrant-orange {
-  background: linear-gradient(135deg, #ff6a00 0%, #ff4500 100%);
+/* Butcher craft button styling */
+.btn-primary-meat {
+  background-color: #9f1239;
   color: #ffffff;
-  box-shadow: 0 4px 18px -2px rgba(255, 85, 0, 0.45);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px -1px rgba(159, 18, 57, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.btn-vibrant-orange:hover {
-  background: linear-gradient(135deg, #ff7a1a 0%, #ff5500 100%);
-  box-shadow: 0 6px 24px -2px rgba(255, 85, 0, 0.6);
+.btn-primary-meat:hover {
+  background-color: #881337;
+  box-shadow: 0 6px 20px -1px rgba(159, 18, 57, 0.55);
   transform: translateY(-1px);
 }
 
-.badge-glossy-orange {
-  background: linear-gradient(135deg, rgba(255, 106, 0, 0.12) 0%, rgba(255, 69, 0, 0.08) 100%);
-  border: 1px solid rgba(255, 85, 0, 0.35);
-  color: #d94800;
+.btn-secondary-dark {
+  background-color: #1c1d22;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  border: 1px solid #2e3039;
+  box-shadow: 0 4px 14px -1px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-/* Subtle luxury card shadows */
-.card-clean-shadow {
-  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.04), 0 10px 24px -6px rgba(15, 23, 42, 0.06);
+.btn-secondary-dark:hover {
+  background-color: #262830;
+  border-color: #434653;
+  transform: translateY(-1px);
 }
 
-.card-clean-shadow:hover {
-  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 20px 40px -8px rgba(15, 23, 42, 0.1);
+.btn-cold-chain {
+  background-color: #0284c7;
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px -1px rgba(2, 132, 199, 0.35);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-cold-chain:hover {
+  background-color: #0369a1;
+  box-shadow: 0 6px 20px -1px rgba(2, 132, 199, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Authentic Butcher Stamp & Quality Badges */
+.stamp-seal {
+  border: 2px dashed #9f1239;
+  background-color: rgba(159, 18, 57, 0.05);
+  color: #881337;
+  font-weight: 800;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.825rem;
+  letter-spacing: -0.01em;
+}
+
+.badge-cold {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-fresh {
+  background-color: #fef2f2;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-vet {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Card Craft Shadow */
+.card-craft {
+  background-color: #ffffff;
+  border: 1px solid var(--border-bone);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px -2px rgba(28, 29, 34, 0.05);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-craft:hover {
+  transform: translateY(-3px);
+  border-color: #d6cebf;
+  box-shadow: 0 12px 30px -4px rgba(28, 29, 34, 0.1);
+}
+
+.card-dark-meat {
+  background-color: #17181c;
+  border: 1px solid #282a32;
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.4);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 8px;
+  height: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f1ede4;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+  background: #c5bba8;
+  border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff5500;
+  background: #9f1239;
 }

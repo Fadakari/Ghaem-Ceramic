@@ -1,519 +1,297 @@
-"use client";
+import React from 'react';
+import type { Metadata } from 'next';
+import Hero from '@/components/Hero';
+import HomeProductShowcase from '@/components/HomeProductShowcase';
+import Link from 'next/link';
+import Image from 'next/image';
+import { getCompanyBundle } from '@/lib/api';
+import { getSafeImageUrl } from '@/lib/imageHelper';
 
-import React from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import InteractiveProducts from "@/components/InteractiveProducts";
-import InteractiveComparison from "@/components/InteractiveComparison";
-import ContactForm from "@/components/ContactForm";
-import { useCompany } from "@/context/CompanyContext";
-import { 
-  ShieldCheck, 
-  ArrowUpRight, 
-  Layers, 
-  Factory, 
-  Flame, 
-  CheckCircle, 
-  ChevronLeft,
-  Award,
-  Sparkles,
-  PhoneCall,
-  Clock,
-  MapPin,
-  Mail,
-  Printer,
-  Wrench,
-  Cog,
-  CheckCircle2,
-  Calendar,
-  AlertTriangle,
-  FileSpreadsheet
-} from "lucide-react";
+export const metadata: Metadata = {
+  title: 'شرکت بی‌سان سام یزد | مجتمع فرآوری بهداشتی گوشت و فرآورده‌های دامی',
+  description: 'تامین تخصصی و مستقیم گوشت گرم گوساله، گوسفندی، شتر بومی یزد و ماکیان با نظارت مقیم سازمان دامپزشکی و پایش برخط زنجیره سرد برای سازمان‌ها، هتل‌ها و خانوار.',
+  openGraph: {
+    title: 'شرکت بی‌سان سام یزد | تامین تخصصی گوشت و فرآورده‌های دامی',
+    description: 'کشتار صنعتی، بسته‌بندی در اتمسفر اصلاح‌شده MAP و تامین عمده برای هتل‌ها، رستوران‌ها و سازمان‌ها.',
+    url: 'https://bisansam.ir',
+    siteName: 'شرکت بی‌سان سام یزد',
+    locale: 'fa_IR',
+    type: 'website',
+  },
+};
 
-export default function HomePage() {
-  const { settings, stats, advantages, products, specs, production_steps, installation_methods, testimonials } = useCompany();
+export default async function HomePage() {
+  const data = await getCompanyBundle();
+  const settings = data.settings;
+  const categories = data.categories || [];
+  const services = data.services || [];
+  const articles = data.articles?.slice(0, 3) || [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fbfcfe] text-slate-800 w-full max-w-full overflow-x-hidden">
-      <Navbar settings={settings} />
+    <div className="min-h-screen bg-[#faf8f5] text-[#1f2937]">
+      {/* 1. Hero Section with Dynamic Backend Image & Single-Line Mobile Badge */}
+      <Hero />
 
-      {/* Hero Section */}
-      <section className="relative pt-16 pb-20 lg:pt-24 lg:pb-28 bg-white border-b border-slate-200/80 overflow-hidden w-full max-w-full">
-        {/* Subtle decorative glow */}
-        <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-gradient-to-br from-orange-400/10 to-amber-300/5 blur-[100px] pointer-events-none rounded-full" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          <div className="max-w-4xl mx-auto text-center">
-            
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-glossy-orange text-xs font-bold mb-6">
-              <span className="w-2 h-2 rounded-full bg-[#ff5500] animate-ping" />
-              <Award className="w-4 h-4 text-[#ff5500]" />
-              <span>{settings.hero_badge}</span>
-            </div>
-
-            {/* Heading */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.3] sm:leading-[1.25] mb-6">
-              {settings.hero_title}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-sm sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto mb-10 font-normal">
-              {settings.hero_subtitle}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-              <a
-                href="#products"
-                className="btn-vibrant-orange inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm sm:text-base cursor-pointer"
-              >
-                <span>مشاهده انواع تایل‌ها و ابعاد قطعات</span>
-                <ChevronLeft className="w-4 h-4" />
-              </a>
-
-              <a
-                href="#comparison"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 card-clean-shadow transition cursor-pointer"
-              >
-                <span>مقایسه فنی با هاردوکس ۵۰۰</span>
-                <ArrowUpRight className="w-4 h-4 text-[#ff5500]" />
-              </a>
-            </div>
-
+      {/* 2. Category Quick Navigator */}
+      <section className="py-12 bg-white border-b border-[#e5dfd5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-xl mx-auto mb-8">
+            <span className="text-xs font-bold text-[#9f1239] uppercase tracking-wider">
+              دسته‌بندی‌های فرآورده‌های پروتئینی
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-[#111216] mt-1">
+              انتخاب بر اساس نوع دام و فرآوری
+            </h3>
           </div>
 
-          {/* 4 Wide Metric Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {stats.slice(0, 4).map((st, idx) => (
-              <div key={idx} className="bg-white border border-slate-200/90 rounded-2xl p-6 card-clean-shadow flex flex-col justify-between">
-                <div>
-                  <span className="text-3xl sm:text-4xl font-black text-[#ff5500] font-mono block mb-1" dir="ltr">
-                    {st.value}
-                  </span>
-                  <strong className="text-sm font-bold text-slate-900 block mb-1">
-                    {st.label}
-                  </strong>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/products?category=${cat.slug}`}
+                className="group p-4 rounded-2xl border border-[#e5dfd5] bg-[#faf8f5] hover:bg-[#9f1239] hover:border-[#9f1239] transition-all duration-200 text-center flex flex-col items-center justify-center space-y-2 shadow-xs hover:shadow-md"
+              >
+                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#9f1239] group-hover:text-white group-hover:bg-[#881337] transition-colors shadow-xs">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
                 </div>
-                <p className="text-xs text-slate-500 leading-relaxed pt-3 border-t border-slate-100">
-                  {st.sublabel || "تایید شده در استانداردهای رسمی"}
-                </p>
-              </div>
+                <div className="text-xs sm:text-sm font-bold text-[#1f2937] group-hover:text-white transition-colors">
+                  {cat.name}
+                </div>
+                <div className="text-[11px] text-gray-500 group-hover:text-rose-100 transition-colors line-clamp-1">
+                  {cat.description || 'برش‌های استاندارد'}
+                </div>
+              </Link>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-[#fbfcfe]">
+      {/* 3. Master Product Showcase with Clickable Cards & Modal Specs */}
+      <HomeProductShowcase />
+
+      {/* 4. Enterprise B2B Supply & HoReCa Spotlight */}
+      <section className="py-16 sm:py-24 bg-[#14151a] text-white border-y border-[#262832]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
-            <div className="lg:col-span-7 space-y-5">
-              <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block">
-                COMPANY OVERVIEW
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">
-                {settings.about_title}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 bg-[#22242e] border border-[#373a48] px-3.5 py-1.5 rounded-full text-xs font-bold text-rose-300">
+                <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+                <span>تامین سازمانی و خدمات HoReCa</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-4xl font-black leading-tight text-white">
+                تامین پایدار پروتئین برای هتل‌ها، رستوران‌ها و صنایع بزرگ کشور
               </h2>
-              
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {settings.about_text_1}
+
+              <p className="text-xs sm:text-base text-gray-300 leading-relaxed font-normal">
+                شرکت بی‌سان سام یزد با سالن‌های مکانیزه کشتار، قطعه‌بندی تمام‌استیل و ناوگان یخچال‌دار جنوب شرق، قراردادهای تامین مستمر تناژ بالا را با تضمین ثبات کیفیت و فاکتور رسمی معتبر منعقد می‌نماید.
               </p>
 
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {settings.about_text_2}
+              {/* Dynamic Services from Backend */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                {services.slice(0, 4).map((srv) => (
+                  <div key={srv.id} className="bg-[#1b1c23] border border-[#2b2d39] p-4 rounded-2xl">
+                    <div className="text-xs text-rose-400 font-bold mb-1">{srv.title}</div>
+                    <div className="text-xs text-gray-400 line-clamp-2">{srv.short_description}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-4 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/services"
+                  className="btn-primary-meat px-6 py-3 text-sm font-bold"
+                >
+                  <span>اطلاعات کامل خدمات و شرایط قرارداد</span>
+                  <svg className="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
+
+                <Link
+                  href="/contact"
+                  className="btn-secondary-dark px-6 py-3 text-sm font-bold"
+                >
+                  استعلام ظرفیت و درخواست جلسه
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="relative rounded-3xl overflow-hidden border border-[#2b2d39] shadow-2xl h-80 sm:h-96 w-full">
+                <Image
+                  src={getSafeImageUrl(settings.facility_image, '/images/facilities/cold-chain-facility.jpg')}
+                  alt="سالن قطعه‌بندی بهداشتی بی‌سان سام یزد"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 500px"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                <div className="absolute bottom-4 right-4 left-4 p-4 rounded-2xl bg-black/75 backdrop-blur-md border border-white/10">
+                  <div className="text-xs text-emerald-400 font-bold">تاسیسات فرآوری صنعتی یزد</div>
+                  <div className="text-xs sm:text-sm font-black text-white mt-0.5">سالن‌های مجهز به اتمسفر کنترل‌شده و فیلتراسیون هوای استریل</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Health & Quality Assurance Pillars */}
+      <section className="py-16 sm:py-20 bg-[#faf8f5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-bold text-[#9f1239] uppercase tracking-wider">
+              چرا بی‌سان سام یزد؟
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#111216] mt-1">
+              ۴ رکن تضمین سلامت و اعتماد مصرف‌کننده
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="card-craft p-6 rounded-3xl space-y-3 bg-white">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#9f1239] flex items-center justify-center font-black text-lg">
+                ۰۱
+              </div>
+              <h3 className="text-base font-bold text-[#111216]">نظارت مقیم دامپزشکی</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                معاینه دقیق دام قبل از ذبح و بازرسی میکروسکوپی لاشه توسط دکتر دامپزشک سازمان دامپزشکی کل کشور.
               </p>
-
-              <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-700">
-                <span className="flex items-center gap-1.5 font-bold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  مدیریت شرکت: {settings.manager_name}
-                </span>
-                <span className="flex items-center gap-1.5 font-bold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  استاندارد ASTM C373-72 و ISO 2768
-                </span>
-                <span className="flex items-center gap-1.5 font-bold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  دفتر مرکزی در شهر یزد
-                </span>
-              </div>
             </div>
 
-            <div className="lg:col-span-5 space-y-4">
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 card-clean-shadow">
-                <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-[#ff5500]" />
-                  سختی فوق‌العاده ۹ در مقیاس موهس
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  مقاومت سایش بی‌نظیر که مانع هرگونه خوردگی در برابر ذرات ساینده کانی‌ها می‌شود.
-                </p>
+            <div className="card-craft p-6 rounded-3xl space-y-3 bg-white">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black text-lg">
+                ۰۲
               </div>
-
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 card-clean-shadow">
-                <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-[#ff5500]" />
-                  مقاومت حرارتی مداوم تا ۸۰۰ درجه
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  ایده‌آل برای شوتهای انتقال گندله، کلینکر داغ و خطوط احیاء مستقیم آهن اسفنجی.
-                </p>
-              </div>
-
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 card-clean-shadow">
-                <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-[#ff5500]" />
-                  کاهش بیش از ۵۰ درصدی وزن بار مرده
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  چگالی ۳.۶ گرم بر سانتی‌متر مکعب در مقایسه با ۷.۸ فولاد، فشار وارده بر شاسی را به نصف می‌رساند.
-                </p>
-              </div>
+              <h3 className="text-base font-bold text-[#111216]">ذبح ۱۰۰٪ شرعی</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                انجام ذبح توسط ذابحین متخصص تحت نظارت روحانی مقیم حوزه نمایندگی ولی‌فقیه در جهاد کشاورزی.
+              </p>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* Interactive Products & Geometries */}
-      <section id="products" className="py-20 bg-white border-t border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block mb-2">
-              SOLUTIONS & GEOMETRIES
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              فرم‌ها، تایل‌ها و قطعات استاندارد سرامیک ضد سایش
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              انتخاب فرم مهندسی متناسب با هندسه تجهیز (شوت‌های مسطح، زانویی‌ها، مخروطی‌ها و لوله‌های انتقال اسلاری)
-            </p>
-          </div>
-
-          <InteractiveProducts products={products} />
-
-        </div>
-      </section>
-
-      {/* Comparison Section */}
-      <section id="comparison" className="py-20 bg-[#fbfcfe]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <InteractiveComparison />
-        </div>
-      </section>
-
-      {/* Technology & Production Pipeline */}
-      <section id="technology" className="py-20 bg-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-14">
-            <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block mb-2">
-              MANUFACTURING EXCELLENCE
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              فرآیند ۷ مرحله‌ای خط تولید و کنترل کیفیت ۱۰۰٪
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              از ورود پودر آلومینای وارداتی فرانسه و هند تا خروج واگن‌ها از کوره تونلی ۱۶۰۰ درجه
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {production_steps.map((step) => (
-              <div
-                key={step.step_number}
-                className="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-6 card-clean-shadow flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#ff4500] to-[#ffa500] text-white flex items-center justify-center font-mono font-bold text-sm shadow-xs">
-                      0{step.step_number}
-                    </div>
-                    <span className="text-[11px] font-bold text-slate-400 font-mono">
-                      QC VERIFIED
-                    </span>
-                  </div>
-
-                  <h3 className="text-base font-bold text-slate-900 mb-1">
-                    {step.title}
-                  </h3>
-
-                  <h4 className="text-xs font-bold text-[#ff5500] mb-3">
-                    {step.headline}
-                  </h4>
-
-                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    {step.description}
-                  </p>
-                </div>
-
-                {step.equipment && (
-                  <div className="pt-3 border-t border-slate-200 text-[11px] text-slate-500 flex items-center gap-1.5">
-                    <Cog className="w-3.5 h-3.5 text-[#ff5500] shrink-0" />
-                    <span>{step.equipment}</span>
-                  </div>
-                )}
+            <div className="card-craft p-6 rounded-3xl space-y-3 bg-white">
+              <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center font-black text-lg">
+                ۰۳
               </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* Technical Specs Table */}
-      <section id="specs" className="py-20 bg-[#fbfcfe] border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-12">
-            <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block mb-2">
-              LABORATORY ANALYSIS
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              مشخصات فنی و نتایج آزمون‌های آزمایشگاهی
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              تطابق با استانداردهای ASTM C373-72 و تاییدیه رسمی مرکز پژوهش متالورژی رازی (RMRC)
-            </p>
-          </div>
-
-          <div className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden card-clean-shadow">
-            <div className="overflow-x-auto">
-              <table className="w-full text-right border-collapse text-xs sm:text-sm min-w-[500px]">
-                <thead>
-                  <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-700">
-                    <th className="py-4 px-6 font-bold">عنوان پارامتر</th>
-                    <th className="py-4 px-6 font-bold">نام انگلیسی</th>
-                    <th className="py-4 px-6 font-bold text-[#ff5500]">مقدار استاندارد</th>
-                    <th className="py-4 px-6 font-bold">استاندارد مرجع / آزمون</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 font-mono">
-                  {specs.map((spec, i) => (
-                    <tr key={i} className="hover:bg-orange-50/20 transition-colors">
-                      <td className="py-4 px-6 font-bold text-slate-900 font-sans">{spec.name_fa}</td>
-                      <td className="py-4 px-6 text-slate-500">{spec.name_en}</td>
-                      <td className="py-4 px-6 font-black text-[#ff5500] text-sm sm:text-base">{spec.value}</td>
-                      <td className="py-4 px-6 text-slate-700 font-sans">{spec.standard_ref}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <h3 className="text-base font-bold text-[#111216]">تکنولوژی گاز محافظ MAP</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                تزریق ترکیب طبیعی گازهای نیتروژن و CO2 جهت ممانعت از تکثیر باکتری بدون نیاز به هیچ ماده شیمیایی نگهدارنده.
+              </p>
             </div>
 
-            <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 text-xs text-slate-600 flex items-center gap-3">
-              <Award className="w-5 h-5 text-[#ff5500] shrink-0" />
-              <span>
-                گزارش رسمی شماره ۳۳۶۹۸-۱ مرکز پژوهش متالورژی رازی با استحکام فشاری ۶۵۶ مگاپاسکال و استحکام خمشی ۱۷۳ مگاپاسکال.
-              </span>
+            <div className="card-craft p-6 rounded-3xl space-y-3 bg-white">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center font-black text-lg">
+                ۰۴
+              </div>
+              <h3 className="text-base font-bold text-[#111216]">پایش آنلاین برودت بار</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                حفظ بی‌وقفه دمای صفر الی ۲ درجه سانتی‌گراد از مرحله پیش‌سردخانه تا لحظه تخلیه در انبار مشتری.
+              </p>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* Engineering Installation Methods */}
-      <section id="installation" className="py-20 bg-white border-t border-slate-200/80">
+      {/* 6. Editorial Knowledge Base Preview - Fully Clickable Cards */}
+      <section className="py-16 sm:py-20 bg-white border-t border-[#e2dcd2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-12">
-            <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block mb-2">
-              INSTALLATION METHODS
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              روش‌های استاندارد نصب و لاینینگ صنعتی
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              نصب صحیح و رعایت اصول عدم شوک حرارتی ضامن طول عمر چندساله سرامیک‌هاست.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            {installation_methods.map((method, idx) => (
-              <div
-                key={idx}
-                className="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-6 card-clean-shadow flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-9 h-9 rounded-lg bg-[#0f1f38] text-white flex items-center justify-center font-mono font-bold text-xs mb-4">
-                    0{idx + 1}
-                  </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">
-                    {method.title}
-                  </h3>
-                  <h4 className="text-xs font-bold text-[#ff5500] mb-3">
-                    {method.subtitle}
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    {method.description}
-                  </p>
-                </div>
-                <div className="bg-white p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700">
-                  <span className="font-bold text-slate-900 block mb-1">نکات کلیدی:</span>
-                  {method.specifications}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10">
             <div>
-              <strong className="block font-bold text-amber-950 mb-0.5">
-                طراحی درزهای انبساط حرارتی (Expansion Joints) در شوت‌های داغ:
-              </strong>
-              در شوتهای عبور مواد داغ نظیر گندله و آهن اسفنجی، درزهای انبساطی توسط مهندسان شرکت محاسبه می‌گردد تا تنش‌های دمایی تخلیه شده و اتصال سرامیک پایدار بماند.
+              <span className="text-xs font-bold text-[#9f1239] uppercase tracking-wider">
+                دانشنامه و راهنمای سلامت گوشت
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#111216] mt-1">
+                آخرین مقالات تخصصی و آموزشی
+              </h2>
             </div>
+            <Link
+              href="/articles"
+              className="mt-4 sm:mt-0 text-xs sm:text-sm font-bold text-[#9f1239] hover:underline"
+            >
+              مشاهده تمامی مقالات ←
+            </Link>
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            {articles.map((article) => {
+              const imageSrc = getSafeImageUrl(article.featured_image, '/images/articles/fresh-meat-guide.jpg');
+              return (
+                <Link
+                  key={article.id}
+                  href={`/articles/${article.slug}`}
+                  className="bg-white rounded-3xl border border-[#e5dfd5] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between group block cursor-pointer"
+                >
+                  <div>
+                    <div className="relative h-48 sm:h-52 w-full bg-gray-100 overflow-hidden">
+                      <Image
+                        src={imageSrc}
+                        alt={article.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-108 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <div className="absolute top-3 right-3 bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-xl border border-white/10">
+                        {article.category}
+                      </div>
+                      <div className="absolute bottom-2.5 right-3 left-3 text-white text-[11px] flex items-center justify-between">
+                        <span>{article.author}</span>
+                        <span className="bg-white/20 backdrop-blur-xs px-2 py-0.5 rounded font-mono">{article.reading_time}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-5 space-y-2">
+                      <h3 className="text-base font-bold text-[#111216] group-hover:text-[#9f1239] transition-colors line-clamp-2 leading-snug">
+                        {article.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                        {article.summary}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-5 pt-0 text-xs font-bold text-[#9f1239] flex items-center gap-1 group-hover:text-[#881337]">
+                    <span>مطالعه کامل مقاله</span>
+                    <span className="rotate-180 transition-transform group-hover:-translate-x-1">←</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Verified References & Testimonials */}
-      <section id="testimonials" className="py-20 bg-[#fbfcfe] border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="max-w-3xl mb-12">
-            <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block mb-2">
-              OFFICIAL CERTIFICATES
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">
-              گواهی‌های رسمی حسن انجام کار و سوابق درخشان
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              نامه‌های مکتوب مدیران ارشد مجتمع‌های بزرگ فولادی و معدنی کشور دال بر کارکرد چند برابری نسبت به هاردوکس
-            </p>
+      {/* 7. Direct Wholesale Inquiry Banner */}
+      <section className="py-12 bg-[#9f1239] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <h2 className="text-2xl sm:text-3xl font-black">
+            نیاز به تامین عمده گوشت گرم یا عقد قرارداد سازمانی دارید؟
+          </h2>
+          <p className="text-xs sm:text-base text-rose-100 max-w-2xl mx-auto leading-relaxed">
+            کارشناسان بازرگانی بی‌سان سام یزد آماده پاسخگویی به استعلام تناژ، ارسال نمونه و تدوین قراردادهای بلندمدت با نرخ رسمی هستند.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/contact"
+              className="bg-white text-[#9f1239] hover:bg-rose-50 px-8 py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-lg transition-colors"
+            >
+              ثبت فرم استعلام قیمت عمده
+            </Link>
+            <a
+              href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
+              className="border-2 border-white/60 hover:border-white text-white px-7 py-3 rounded-2xl font-bold text-sm sm:text-base transition-colors"
+            >
+              تماس مستقیم با واحد فروش: {settings.phone_sales}
+            </a>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((t, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-slate-200/90 rounded-2xl p-6 card-clean-shadow flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="badge-glossy-orange px-2.5 py-0.5 rounded text-xs font-bold">
-                      {t.result_highlight}
-                    </span>
-                    <span className="text-[11px] text-slate-400 font-mono">
-                      {t.letter_number}
-                    </span>
-                  </div>
-
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-1">
-                    {t.client_name}
-                  </h3>
-
-                  <h4 className="text-xs text-slate-500 mb-3">
-                    {t.project_title}
-                  </h4>
-
-                  <p className="text-xs text-slate-600 leading-relaxed italic bg-slate-50 p-3.5 rounded-xl border border-slate-200/70 mb-4">
-                    «{t.quote}»
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                  <span className="font-semibold text-slate-700">{t.signer}</span>
-                  <span className="font-mono flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                    {t.letter_date}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            
-            {/* Contact Details */}
-            <div className="lg:col-span-5 space-y-6">
-              <div>
-                <span className="badge-glossy-orange px-3.5 py-1 rounded-md text-xs font-bold font-mono uppercase inline-block mb-2">
-                  CONTACT HEADQUARTERS
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mb-2">
-                  دفتر مرکزی و مدیریت شرکت
-                </h2>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  کارشناسان فنی ما آماده پاسخگویی و ارائه نقشه‌های لاینینگ هستند.
-                </p>
-              </div>
-
-              <div className="space-y-3.5 text-xs sm:text-sm">
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[#ff5500] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">نشانی:</span>
-                    <span className="font-medium text-slate-800 leading-relaxed">{settings.address}</span>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                  <PhoneCall className="w-4 h-4 text-[#ff5500] shrink-0" />
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">تلفن تماس مستقیم:</span>
-                    <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="font-bold text-slate-900 font-mono text-sm hover:text-[#ff5500]" dir="ltr">
-                      {settings.phone}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                  <Printer className="w-4 h-4 text-slate-500 shrink-0" />
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">شماره فکس:</span>
-                    <span className="font-bold text-slate-800 font-mono text-sm" dir="ltr">{settings.fax}</span>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-slate-500 shrink-0" />
-                  <div>
-                    <span className="text-slate-400 text-[11px] block">پست الکترونیک (Email):</span>
-                    <a href={`mailto:${settings.email}`} className="font-bold text-slate-800 font-mono text-xs hover:text-[#ff5500]">
-                      {settings.email}
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 bg-orange-50/70 border border-orange-200/80 rounded-xl text-xs text-orange-950 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#ff5500] shrink-0" />
-                <span>ساعات کاری: شنبه تا چهارشنبه ۸:۰۰ الی ۱۶:۳۰ | پنج‌شنبه تا ۱۳:۰۰</span>
-              </div>
-            </div>
-
-            {/* Inquiry Form */}
-            <div className="lg:col-span-7 bg-[#fbfcfe] border border-slate-200 rounded-3xl p-6 sm:p-10 card-clean-shadow">
-              <h3 className="text-xl font-black text-slate-900 mb-2">
-                فرم استعلام فنی و ثبت درخواست مشاوره
-              </h3>
-              <p className="text-xs text-slate-500 mb-6">
-                جهت استعلام قیمت یا ارسال مشخصات شوت‌ها و لوله‌های خود، فرم زیر را تکمیل نمایید.
-              </p>
-
-              <ContactForm />
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      <Footer settings={settings} />
     </div>
   );
 }

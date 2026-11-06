@@ -99,7 +99,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#111216]/95 backdrop-blur-md border-b border-[#242632] text-white">
+      <header className="sticky top-0 z-40 bg-[#0f1013]/95 backdrop-blur-md border-b border-[#22242f] text-white">
         {/* Top Micro-Bar: License, Telemetry & Hotline */}
         <div className="hidden lg:flex justify-between items-center text-xs py-1.5 px-6 bg-[#0a0b0d] border-b border-[#1c1d24] text-gray-400">
           <div className="flex items-center gap-5">
@@ -128,25 +128,25 @@ export default function Navbar() {
 
         {/* Main Desktop & Mobile Bar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
+          <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
             
             {/* Brand Logo & Name */}
-            <Link href="/" className="flex items-center gap-3 shrink-0 group">
-              <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-white/5 p-1 rounded-2xl border border-white/10 group-hover:border-rose-500/40 transition-colors shadow-xs">
+            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 shrink min-w-0 group">
+              <div className="relative w-9 h-9 sm:w-11 sm:h-11 shrink-0 bg-white/5 p-1 rounded-2xl border border-white/10 group-hover:border-rose-500/40 transition-colors shadow-xs">
                 <Image
                   src="/images/brand/logo-mark.png"
                   alt="لوگو شرکت بی‌سان سام یزد"
-                  width={48}
-                  height={48}
+                  width={44}
+                  height={44}
                   className="object-contain w-full h-full"
                   priority
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-rose-400 transition-colors whitespace-nowrap">
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm sm:text-lg font-black tracking-tight text-white group-hover:text-rose-400 transition-colors whitespace-nowrap truncate">
                   {settings.company_name || 'بی‌سان سام یزد'}
                 </span>
-                <span className="text-[10px] sm:text-xs text-gray-400 font-medium line-clamp-1 whitespace-nowrap">
+                <span className="text-[10px] text-gray-400 font-medium truncate hidden xs:block">
                   مجتمع فرآوری و تامین گوشت
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function Navbar() {
 
               <Link
                 href="/contact"
-                className="btn-primary-meat px-4.5 py-2.5 text-xs xl:text-sm font-bold shadow-md shadow-rose-950/50 whitespace-nowrap"
+                className="btn-primary-meat px-5 py-2.5 text-xs xl:text-sm font-bold shadow-md shadow-rose-950/50 whitespace-nowrap"
               >
                 <span>استعلام قیمت عمده</span>
                 <svg className="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -195,35 +195,27 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Mobile Right Controls: Search + Phone + Hamburger */}
-            <div className="flex items-center gap-2 lg:hidden">
-              <Link
-                href="/products"
-                className="p-2 text-gray-300 hover:text-white bg-white/5 border border-white/10 rounded-xl"
-                aria-label="جستجوی محصولات"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </Link>
-
+            {/* Mobile Header Controls: Clean, Perfectly Padded & Never Clipped */}
+            <div className="flex items-center gap-2 lg:hidden shrink-0">
               <a
                 href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
-                className="p-2 text-amber-400 bg-amber-950/40 border border-amber-800/50 rounded-xl"
+                className="w-9 h-9 flex items-center justify-center text-amber-400 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-800/40 rounded-xl transition-all"
                 aria-label="تماس با واحد بازرگانی"
+                title="تماس مستقیم با واحد بازرگانی"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </a>
 
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2.5 text-gray-200 hover:text-white bg-white/5 border border-white/10 rounded-xl focus:outline-none cursor-pointer"
-                aria-label="باز کردن منو"
+                className="flex items-center gap-1.5 py-1.5 px-3 text-white bg-rose-950/80 hover:bg-rose-900 border border-rose-800/70 rounded-xl shadow-md cursor-pointer transition-all active:scale-95"
+                aria-label="باز کردن منوی ناوبری"
               >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <span className="text-xs font-bold text-rose-200">منو</span>
+                <svg className="w-5 h-5 text-rose-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
             </div>
@@ -232,115 +224,131 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Modern, Luxury Slide-Over Mobile Menu Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop Overlay */}
-          <div
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300"
-          />
+      {/* Animated Luxury Slide-Over Mobile Menu Drawer */}
+      <div className="lg:hidden">
+        {/* Backdrop Overlay with Smooth Fade Transition */}
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className={`mobile-drawer-backdrop ${mobileMenuOpen ? 'is-open' : 'is-closed'}`}
+          aria-hidden={!mobileMenuOpen}
+        />
 
-          {/* Drawer Panel */}
-          <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-[#121316] text-white border-l border-[#282a36] shadow-2xl flex flex-col justify-between overflow-y-auto z-10 transition-transform duration-300">
-            
-            {/* Drawer Header */}
-            <div>
-              <div className="p-5 border-b border-[#232532] flex items-center justify-between bg-[#0e0f13]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 p-1 border border-white/10 flex items-center justify-center">
-                    <Image
-                      src="/images/brand/logo-mark.png"
-                      alt="لوگو"
-                      width={40}
-                      height={40}
-                      className="object-contain"
-                    />
-                  </div>
-                  <div>
-                    <div className="font-black text-sm text-white">{settings.company_name}</div>
-                    <div className="text-[10px] text-gray-400">فرآوری و تامین گوشت استاندارد</div>
-                  </div>
+        {/* Drawer Panel with Smooth Hardware-Accelerated Slide Transition */}
+        <div
+          className={`mobile-drawer-panel ${mobileMenuOpen ? 'is-open' : 'is-closed'}`}
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* Drawer Top Header */}
+          <div>
+            <div className="p-4 sm:p-5 border-b border-[#22242f] flex items-center justify-between bg-[#0e0f13]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-white/5 p-1 border border-white/10 flex items-center justify-center shrink-0">
+                  <Image
+                    src="/images/brand/logo-mark.png"
+                    alt="لوگو بی‌سان سام"
+                    width={38}
+                    height={38}
+                    className="object-contain"
+                  />
                 </div>
-
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 flex items-center justify-center cursor-pointer transition-colors"
-                  aria-label="بستن منو"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                <div>
+                  <div className="font-black text-sm text-white">{settings.company_name}</div>
+                  <div className="text-[10px] text-gray-400">فرآوری و تامین گوشت استاندارد</div>
+                </div>
               </div>
 
-              {/* Navigation Items with Icons & Sublabels */}
-              <div className="p-4 space-y-1.5">
-                {navLinks.map((link) => {
-                  const active = isActive(link.href);
-                  return (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3.5 p-3 rounded-2xl transition-all duration-200 ${
-                        active
-                          ? 'bg-rose-950/80 text-rose-300 border border-rose-800/60 shadow-sm'
-                          : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                      }`}
-                    >
-                      <div className={`p-2 rounded-xl shrink-0 ${active ? 'bg-rose-900/60 text-rose-300' : 'bg-white/5 text-gray-400'}`}>
-                        {link.icon}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-bold text-sm leading-tight">{link.name}</div>
-                        <div className="text-[10px] text-gray-400 font-normal mt-0.5">{link.sublabel}</div>
-                      </div>
-                      <svg className="w-4 h-4 text-gray-500 rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Drawer Footer Actions */}
-            <div className="p-4 border-t border-[#232532] bg-[#0c0d10] space-y-3">
-              <Link
-                href="/contact"
+              <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="btn-primary-meat w-full py-3.5 text-xs sm:text-sm font-bold text-center block shadow-lg"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 flex items-center justify-center cursor-pointer transition-colors"
+                aria-label="بستن منو"
               >
-                استعلام قیمت و تامین عمده B2B
-              </Link>
-
-              {/* Quick Contact & Info Card */}
-              <div className="bg-[#17181e] p-3 rounded-2xl border border-white/5 space-y-2 text-xs">
-                <div className="flex items-center justify-between text-gray-400">
-                  <span>تلفن بازرگانی:</span>
-                  <a
-                    href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
-                    className="text-amber-400 font-bold font-mono"
-                    dir="ltr"
-                  >
-                    {settings.phone_sales}
-                  </a>
-                </div>
-                <div className="flex items-center justify-between text-gray-400 pt-1 border-t border-white/5">
-                  <span>کد بهداشتی دامپزشکی:</span>
-                  <span className="text-emerald-400 font-mono font-bold">{settings.veterinary_code}</span>
-                </div>
-                <div className="flex items-center justify-between text-gray-400 pt-1 border-t border-white/5">
-                  <span>پایش برودت زنجیره سرد:</span>
-                  <span className="text-sky-300 font-mono font-bold">{settings.cold_chain_temp}</span>
-                </div>
-              </div>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
 
+            {/* Quick Search Shortcut inside Drawer */}
+            <div className="p-3.5 pb-1">
+              <Link
+                href="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>جستجو در کاتالوگ و برش‌های گوشت...</span>
+              </Link>
+            </div>
+
+            {/* Navigation Items with Icons & Sublabels */}
+            <div className="p-3.5 space-y-1.5">
+              {navLinks.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3.5 p-3 rounded-2xl transition-all duration-200 ${
+                      active
+                        ? 'bg-rose-950/80 text-rose-300 border border-rose-800/60 shadow-sm'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <div className={`p-2 rounded-xl shrink-0 ${active ? 'bg-rose-900/60 text-rose-300' : 'bg-white/5 text-gray-400'}`}>
+                      {link.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-sm leading-tight truncate">{link.name}</div>
+                      <div className="text-[10px] text-gray-400 font-normal mt-0.5 truncate">{link.sublabel}</div>
+                    </div>
+                    <svg className="w-4 h-4 text-gray-500 rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Drawer Footer Actions */}
+          <div className="p-4 border-t border-[#22242f] bg-[#0c0d10] space-y-3">
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="btn-primary-meat w-full py-3.5 text-xs sm:text-sm font-bold text-center block shadow-lg"
+            >
+              استعلام قیمت و تامین عمده B2B
+            </Link>
+
+            {/* Quick Contact & Info Card */}
+            <div className="bg-[#17181e] p-3 rounded-2xl border border-white/5 space-y-2 text-xs">
+              <div className="flex items-center justify-between text-gray-400">
+                <span>تلفن بازرگانی:</span>
+                <a
+                  href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
+                  className="text-amber-400 font-bold font-mono"
+                  dir="ltr"
+                >
+                  {settings.phone_sales}
+                </a>
+              </div>
+              <div className="flex items-center justify-between text-gray-400 pt-1.5 border-t border-white/5">
+                <span>کد بهداشتی دامپزشکی:</span>
+                <span className="text-emerald-400 font-mono font-bold">{settings.veterinary_code}</span>
+              </div>
+              <div className="flex items-center justify-between text-gray-400 pt-1.5 border-t border-white/5">
+                <span>پایش برودت زنجیره سرد:</span>
+                <span className="text-sky-300 font-mono font-bold">{settings.cold_chain_temp}</span>
+              </div>
+            </div>
+          </div>
+
         </div>
-      )}
+      </div>
     </>
   );
 }

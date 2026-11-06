@@ -40,8 +40,8 @@
   --pasture-moss: #166534;
   --cold-ice: #0284c7;
   --cold-cyan: #0ea5e9;
-  --butcher-dark: #121316;
-  --butcher-charcoal: #1c1d22;
+  --butcher-dark: #0f1013;
+  --butcher-charcoal: #17181d;
   --surface-bone: #faf8f5;
   --surface-parchment: #f4efe6;
   --border-bone: #e5dfd5;
@@ -67,38 +67,99 @@ body {
   max-width: 100vw;
   width: 100%;
   position: relative;
-  line-height: 1.8;
+  line-height: 1.85;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Butcher craft button styling */
+/* Animations & Micro-Interactions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-pulseSoft {
+  animation: pulseSoft 4s ease-in-out infinite;
+}
+
+/* Luxury Meat Buttons */
 .btn-primary-meat {
-  background-color: #9f1239;
+  background: linear-gradient(135deg, #9f1239 0%, #881337 100%);
   color: #ffffff;
   font-weight: 700;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 14px -1px rgba(159, 18, 57, 0.4);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px -2px rgba(159, 18, 57, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary-meat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
+}
+
+.btn-primary-meat:hover::before {
+  left: 100%;
 }
 
 .btn-primary-meat:hover {
-  background-color: #881337;
-  box-shadow: 0 6px 20px -1px rgba(159, 18, 57, 0.55);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+  box-shadow: 0 8px 24px -2px rgba(159, 18, 57, 0.55);
+  transform: translateY(-2px);
 }
 
 .btn-secondary-dark {
-  background-color: #1c1d22;
+  background-color: #17181d;
   color: #ffffff;
   font-weight: 700;
-  border-radius: 0.75rem;
-  border: 1px solid #2e3039;
+  border-radius: 1rem;
+  border: 1px solid #282a35;
   box-shadow: 0 4px 14px -1px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -106,121 +167,135 @@ body {
 }
 
 .btn-secondary-dark:hover {
-  background-color: #262830;
-  border-color: #434653;
-  transform: translateY(-1px);
+  background-color: #20222a;
+  border-color: #3b3e4d;
+  transform: translateY(-2px);
 }
 
-.btn-cold-chain {
-  background-color: #0284c7;
+/* Minimal Luxury Badges - Clean & Collision-Free */
+.badge-fresh {
+  background: rgba(159, 18, 57, 0.9);
   color: #ffffff;
   font-weight: 700;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 14px -1px rgba(2, 132, 199, 0.35);
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.btn-cold-chain:hover {
-  background-color: #0369a1;
-  box-shadow: 0 6px 20px -1px rgba(2, 132, 199, 0.5);
-  transform: translateY(-1px);
-}
-
-/* Authentic Butcher Stamp & Quality Badges */
-.stamp-seal {
-  border: 2px dashed #9f1239;
-  background-color: rgba(159, 18, 57, 0.05);
-  color: #881337;
-  font-weight: 800;
-  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
   padding: 0.25rem 0.75rem;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.825rem;
-  letter-spacing: -0.01em;
+  backdrop-blur-md: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .badge-cold {
-  background-color: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
+  background: rgba(2, 132, 199, 0.9);
+  color: #ffffff;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   border-radius: 9999px;
-  padding: 0.2rem 0.65rem;
+  padding: 0.25rem 0.75rem;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  backdrop-blur-md: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.badge-fresh {
-  background-color: #fef2f2;
-  color: #9f1239;
-  border: 1px solid #fecdd3;
-  font-weight: 700;
-  font-size: 0.8rem;
-  border-radius: 9999px;
-  padding: 0.2rem 0.65rem;
+.badge-pill-subtle {
+  background: #f1ece4;
+  color: #4b5563;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-radius: 0.6rem;
+  padding: 0.2rem 0.6rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
 }
 
-.badge-vet {
-  background-color: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-  font-weight: 700;
-  font-size: 0.8rem;
-  border-radius: 9999px;
-  padding: 0.2rem 0.65rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-/* Card Craft Shadow */
-.card-craft {
+/* Luxury Card with Soft Velvet Shadows */
+.card-luxury {
   background-color: #ffffff;
-  border: 1px solid var(--border-bone);
-  border-radius: 1rem;
-  box-shadow: 0 4px 20px -2px rgba(28, 29, 34, 0.05);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(229, 223, 213, 0.8);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px -2px rgba(15, 16, 19, 0.04);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.card-craft:hover {
-  transform: translateY(-3px);
-  border-color: #d6cebf;
-  box-shadow: 0 12px 30px -4px rgba(28, 29, 34, 0.1);
-}
-
-.card-dark-meat {
-  background-color: #17181c;
-  border: 1px solid #282a32;
-  border-radius: 1rem;
-  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.4);
+.card-luxury:hover {
+  transform: translateY(-4px);
+  border-color: rgba(159, 18, 57, 0.2);
+  box-shadow: 0 20px 40px -6px rgba(15, 16, 19, 0.09);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1ede4;
+  background: #faf8f5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c5bba8;
-  border-radius: 4px;
+  background: #d4cbba;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #9f1239;
+}
+
+/* Animated Slide-Over Mobile Drawer */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 50;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease;
+}
+
+.mobile-drawer-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-drawer-backdrop.is-closed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.mobile-drawer-panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 86vw;
+  max-width: 380px;
+  background: #101115;
+  border-left: 1px solid #232532;
+  box-shadow: -12px 0 45px rgba(0, 0, 0, 0.7);
+  z-index: 51;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+  will-change: transform;
+}
+
+.mobile-drawer-panel.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.mobile-drawer-panel.is-closed {
+  transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
 }

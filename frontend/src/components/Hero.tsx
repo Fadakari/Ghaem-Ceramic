@@ -107,53 +107,59 @@ export default function Hero() {
           </div>
 
           {/* Featured Visual Card with High-Res Cut Showcase */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 animate-fadeIn">
             <div className="relative mx-auto max-w-md lg:max-w-none">
               
-              <div className="relative rounded-3xl overflow-hidden bg-[#16171d] border-2 border-[#2b2d39] p-3 sm:p-4 shadow-2xl shadow-black/80">
+              {/* Subtle ambient luxury glow behind card */}
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-rose-900/30 to-amber-700/20 rounded-3xl blur-xl opacity-70 group-hover:opacity-100 transition duration-1000"></div>
+
+              <div className="relative rounded-3xl overflow-hidden bg-[#14151a] border border-[#2b2d39] p-3 sm:p-4 shadow-2xl shadow-black/80">
                 
                 {/* Product Image */}
-                <div className="relative h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-black/40">
+                <div className="relative h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-black/40 group">
                   <Image
                     src={heroImageSrc}
                     alt="برش ممتاز گوشت گوساله و گوسفندی"
                     fill
                     sizes="(max-width: 768px) 100vw, 450px"
-                    className="object-cover object-center hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
                   />
                   
                   {/* Floating badges on image */}
-                  <div className="absolute top-3 right-3">
-                    <span className="stamp-seal bg-white/95 backdrop-blur-md shadow-lg text-xs">
+                  <div className="absolute top-3.5 right-3.5 left-3.5 flex items-center justify-between pointer-events-none z-10">
+                    <span className="badge-fresh shadow-lg">
                       تضمین تازگی کشتار روز
+                    </span>
+                    <span className="badge-cold shadow-lg">
+                      پایش برودت IoT
                     </span>
                   </div>
 
-                  <div className="absolute bottom-3 right-3 left-3 bg-[#0d0e12]/90 backdrop-blur-md border border-white/10 rounded-xl p-3 flex items-center justify-between">
+                  <div className="absolute bottom-3 right-3 left-3 bg-[#0d0e12]/85 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex items-center justify-between text-white">
                     <div>
-                      <div className="text-[10px] sm:text-xs text-gray-400 font-medium">نظارت مداوم بهداشتی</div>
+                      <div className="text-[10px] text-gray-400 font-medium">نظارت مداوم بهداشتی</div>
                       <div className="text-xs sm:text-sm font-bold text-white">سازمان دامپزشکی کشور</div>
                     </div>
                     <div className="text-left">
-                      <div className="text-[10px] sm:text-xs text-gray-400 font-medium">سنسور IoT دما</div>
+                      <div className="text-[10px] text-gray-400 font-medium">سنسور برخط دما</div>
                       <div className="text-xs sm:text-sm font-bold text-sky-400 font-mono" dir="ltr">+1.8°C</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Sub-strip with 3 key assurances */}
-                <div className="grid grid-cols-3 gap-2 pt-3 text-center">
-                  <div className="bg-[#1f212a] py-2 px-1 rounded-xl border border-[#2e313e]">
-                    <div className="text-[10px] sm:text-[11px] text-gray-400">بسته‌بندی</div>
-                    <div className="text-xs font-bold text-rose-300">گاز محافظ MAP</div>
+                {/* Sub-strip with 3 key assurances - Seamless Glass Ribbon */}
+                <div className="flex items-center justify-around pt-3 text-center text-xs divide-x divide-x-reverse divide-white/10">
+                  <div className="flex-1 px-1">
+                    <div className="text-[10px] text-gray-400">بسته‌بندی</div>
+                    <div className="text-xs font-bold text-rose-300 mt-0.5">اتمسفر MAP</div>
                   </div>
-                  <div className="bg-[#1f212a] py-2 px-1 rounded-xl border border-[#2e313e]">
-                    <div className="text-[10px] sm:text-[11px] text-gray-400">ذبح</div>
-                    <div className="text-xs font-bold text-emerald-400">شرعی ۱۰۰٪</div>
+                  <div className="flex-1 px-1">
+                    <div className="text-[10px] text-gray-400">ذبح</div>
+                    <div className="text-xs font-bold text-emerald-400 mt-0.5">شرعی ۱۰۰٪</div>
                   </div>
-                  <div className="bg-[#1f212a] py-2 px-1 rounded-xl border border-[#2e313e]">
-                    <div className="text-[10px] sm:text-[11px] text-gray-400">ارسال</div>
-                    <div className="text-xs font-bold text-amber-300">ناوگان یخچال‌دار</div>
+                  <div className="flex-1 px-1">
+                    <div className="text-[10px] text-gray-400">حمل اختصاصی</div>
+                    <div className="text-xs font-bold text-amber-300 mt-0.5">ناوگان سردخانه‌ای</div>
                   </div>
                 </div>
 
@@ -164,38 +170,40 @@ export default function Hero() {
 
         </div>
 
-        {/* Corporate Key Stats Bar */}
-        <div className="mt-10 sm:mt-16 pt-8 border-t border-[#20222b] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-          <div className="bg-[#15161c] border border-[#252733] rounded-2xl p-4 text-center">
-            <div className="text-xl sm:text-3xl font-black text-rose-400 font-mono">
-              {settings.annual_tonnage || '۱۲,۰۰۰+ تن'}
+        {/* Corporate Key Trust Ribbon - Spacious & Prestigious (NO clunky bourse boxes) */}
+        <div className="mt-12 sm:mt-20 pt-8 sm:pt-10 border-t border-white/10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x sm:divide-x-reverse divide-white/10">
+            <div className="text-center sm:text-right px-2 sm:px-4 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-4xl font-black text-rose-400 font-mono tracking-tight">
+                {settings.annual_tonnage || '۱۲,۰۰۰+ تن'}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-200 font-bold mt-1.5">ظرفیت تامین سالانه پروتئین</div>
+              <div className="text-[11px] text-gray-400 mt-0.5">توزیع کشوری و استانی پایدار</div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-300 font-bold mt-1">تامین سالانه پروتئین</div>
-            <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">کشوری و استانی</div>
-          </div>
 
-          <div className="bg-[#15161c] border border-[#252733] rounded-2xl p-4 text-center">
-            <div className="text-xl sm:text-3xl font-black text-sky-400 font-mono">
-              {settings.active_centers || '۱۸۰+ مرکز'}
+            <div className="text-center sm:text-right px-2 sm:px-4 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-4xl font-black text-sky-400 font-mono tracking-tight">
+                {settings.active_centers || '۱۸۰+ مرکز'}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-200 font-bold mt-1.5">مراکز درمانی و ارگانی طرف قرارداد</div>
+              <div className="text-[11px] text-gray-400 mt-0.5">بیمارستان‌ها، هتل‌ها و نهادها</div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-300 font-bold mt-1">طرف قرارداد فعال</div>
-            <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">هتل، رستوران و ارگان</div>
-          </div>
 
-          <div className="bg-[#15161c] border border-[#252733] rounded-2xl p-4 text-center">
-            <div className="text-xl sm:text-3xl font-black text-emerald-400 font-mono">
-              {settings.cold_chain_temp || '۰ تا ۲+ درجه'}
+            <div className="text-center sm:text-right px-2 sm:px-4 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight">
+                {settings.cold_chain_temp || '۰ تا ۲+ درجه'}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-200 font-bold mt-1.5">پایش پیوسته زنجیره سرمایش</div>
+              <div className="text-[11px] text-gray-400 mt-0.5">سنسورهای هوشمند IoT</div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-300 font-bold mt-1">پایش دمای زنجیره سرد</div>
-            <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">سنسورهای برخط IoT</div>
-          </div>
 
-          <div className="bg-[#15161c] border border-[#252733] rounded-2xl p-4 text-center">
-            <div className="text-xl sm:text-3xl font-black text-amber-400 font-mono">
-              {settings.satisfaction_rate || '۹۹.۴٪'}
+            <div className="text-center sm:text-right px-2 sm:px-4 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-4xl font-black text-amber-400 font-mono tracking-tight">
+                {settings.satisfaction_rate || '۹۹.۴٪'}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-200 font-bold mt-1.5">شاخص کیفی و رضایت مشتریان</div>
+              <div className="text-[11px] text-gray-400 mt-0.5">بر اساس ارزیابی ادواری خریداران</div>
             </div>
-            <div className="text-xs sm:text-sm text-gray-300 font-bold mt-1">شاخص کیفیت و رضایت</div>
-            <div className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5">بر اساس ارزیابی ادواری</div>
           </div>
         </div>
 

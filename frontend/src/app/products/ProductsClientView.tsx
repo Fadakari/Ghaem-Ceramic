@@ -185,14 +185,14 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
           </button>
         </div>
       ) : (
-        /* Products Grid */
+        /* Products Grid - Minimalist Luxury */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredProducts.map((product) => {
             const imageSrc = getSafeImageUrl(product.image);
             return (
               <div
                 key={product.id}
-                className="bg-white rounded-3xl border border-[#e5dfd5] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden group"
+                className="card-luxury flex flex-col justify-between overflow-hidden group"
               >
                 <div>
                   {/* Photo & Clickable Area */}
@@ -202,30 +202,19 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
                       alt={product.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover object-center group-hover:scale-108 transition-transform duration-500"
+                      className="object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30" />
+                    {/* Gradient overlay for contrast */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
 
-                    {/* Badges on Top */}
-                    <div className="absolute top-3.5 right-3.5 flex flex-wrap gap-1.5">
-                      <span className="badge-fresh shadow-md text-xs font-bold px-2.5 py-0.5">
+                    {/* Top Badges Bar - NEVER COLLIDES */}
+                    <div className="absolute top-3.5 right-3.5 left-3.5 flex items-center justify-between pointer-events-none z-10">
+                      <span className="badge-fresh shadow-md">
                         {product.animal_type_display || product.animal_type}
                       </span>
-                      {product.temperature_state === 'chilled' ? (
-                        <span className="badge-cold shadow-md text-xs font-bold px-2.5 py-0.5">
-                          گرم تازه ۰-۲°C
-                        </span>
-                      ) : (
-                        <span className="badge-cold shadow-md text-xs font-bold px-2.5 py-0.5">
-                          منجمد IQF
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="absolute top-3.5 left-3.5">
-                      <span className="stamp-seal bg-white/95 text-[10px] font-bold px-2.5 py-0.5 shadow-sm">
-                        {product.packaging_type_display || 'بسته‌بندی MAP'}
+                      <span className="badge-cold shadow-md">
+                        {product.temperature_state === 'chilled' ? 'گرم تازه ۰-۲°C' : 'منجمد IQF'}
                       </span>
                     </div>
 
@@ -238,63 +227,51 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
                     </div>
                   </Link>
 
-                  {/* Body Specs */}
+                  {/* Body Specs - Minimalist & Spacious */}
                   <div className="p-5 sm:p-6 space-y-4">
-                    <div className="space-y-2 text-xs text-gray-600">
+                    <div className="space-y-1.5 text-xs text-gray-600">
                       <div className="flex items-start gap-1.5">
-                        <span className="font-bold text-gray-900 flex-shrink-0">کاربرد در پخت:</span>
-                        <span className="text-gray-700">{product.suitable_for}</span>
+                        <span className="font-bold text-gray-900 shrink-0">کاربرد در پخت:</span>
+                        <span className="text-gray-700 truncate">{product.suitable_for}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-gray-900 flex-shrink-0">ماندگاری بهداشتی:</span>
+                        <span className="font-bold text-gray-900 shrink-0">ماندگاری بهداشتی:</span>
                         <span className="text-gray-700">{product.shelf_life}</span>
                       </div>
                     </div>
 
-                    {/* Quality Indicators: Marbling & Tenderness */}
-                    <div className="bg-[#faf7f2] rounded-2xl p-3.5 grid grid-cols-2 gap-2 text-xs border border-[#e8ded0]">
-                      <div>
-                        <div className="text-[10px] text-gray-500 font-bold mb-1">ماربلینگ (چربی بافت)</div>
+                    {/* Quality Indicators: Marbling & Packaging Badge */}
+                    <div className="flex items-center justify-between pt-2 border-t border-[#f0ebe0] text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold text-gray-500">ماربلینگ:</span>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <span
                               key={star}
-                              className={`w-3 h-3 rounded-full ${
+                              className={`w-2.5 h-2.5 rounded-full transition-colors ${
                                 star <= product.marbling_score
                                   ? 'bg-[#9f1239]'
-                                  : 'bg-gray-300'
+                                  : 'bg-gray-200'
                               }`}
                             />
                           ))}
                         </div>
                       </div>
 
-                      <div>
-                        <div className="text-[10px] text-gray-500 font-bold mb-1">لطافت و تردی بافت</div>
-                        <div className="flex items-center gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <span
-                              key={star}
-                              className={`w-3 h-3 rounded-full ${
-                                star <= product.tenderness_rating
-                                  ? 'bg-emerald-600'
-                                  : 'bg-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                      <span className="badge-pill-subtle">
+                        {product.packaging_type_display || 'بسته‌بندی MAP'}
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Card Actions */}
-                <div className="px-5 sm:px-6 pb-5 pt-2 flex items-center gap-2 border-t border-[#f0ebe0]">
+                <div className="px-5 sm:px-6 pb-5 pt-2 flex items-center gap-2 border-t border-[#f0ebe0]/70">
                   <Link
                     href={`/products/${product.slug}`}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-[#1c1d22] hover:bg-[#2c2d36] text-white text-xs font-bold text-center transition-colors"
+                    className="flex-1 py-2.5 px-3 rounded-xl bg-[#17181d] hover:bg-[#252730] text-white text-xs font-bold text-center transition-colors"
                   >
-                    مشاهده جزئیات و صفحه محصول
+                    مشاهده مشخصات و آنالیز
                   </Link>
 
                   <Link

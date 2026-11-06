@@ -169,25 +169,13 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
                   className="object-cover object-center"
                 />
 
-                {/* Floating Top Badges */}
-                <div className="absolute top-4 right-4 flex flex-wrap gap-2">
+                {/* Floating Top Badges Bar - Clean & Non-colliding */}
+                <div className="absolute top-4 right-4 left-4 flex items-center justify-between pointer-events-none z-10">
                   <span className="badge-fresh shadow-md text-xs font-bold px-3 py-1">
                     {product.animal_type_display || product.animal_type}
                   </span>
-                  {product.temperature_state === 'chilled' ? (
-                    <span className="badge-cold shadow-md text-xs font-bold px-3 py-1">
-                      گرم تازه (۰ تا ۲ درجه)
-                    </span>
-                  ) : (
-                    <span className="badge-cold shadow-md text-xs font-bold px-3 py-1">
-                      منجمد IQF (-۱۸ درجه)
-                    </span>
-                  )}
-                </div>
-
-                <div className="absolute top-4 left-4">
-                  <span className="stamp-seal bg-white/95 text-xs font-bold px-3 py-1 shadow-md">
-                    {product.packaging_type_display || 'بسته‌بندی بهداشتی'}
+                  <span className="badge-cold shadow-md text-xs font-bold px-3 py-1">
+                    {product.temperature_state === 'chilled' ? 'گرم تازه (۰ تا ۲ درجه)' : 'منجمد IQF (-۱۸ درجه)'}
                   </span>
                 </div>
 

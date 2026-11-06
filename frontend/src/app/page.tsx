@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Hero from '@/components/Hero';
 import HomeProductShowcase from '@/components/HomeProductShowcase';
+import MeatCutGuide from '@/components/MeatCutGuide';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCompanyBundle } from '@/lib/api';
@@ -70,6 +71,9 @@ export default async function HomePage() {
 
       {/* 3. Master Product Showcase with Clickable Cards & Modal Specs */}
       <HomeProductShowcase />
+
+      {/* 3.5 Interactive Butcher Cut Anatomy Guide */}
+      <MeatCutGuide />
 
       {/* 4. Enterprise B2B Supply & HoReCa Spotlight */}
       <section className="py-16 sm:py-24 bg-[#14151a] text-white border-y border-[#262832]">

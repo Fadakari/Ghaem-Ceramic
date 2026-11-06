@@ -125,8 +125,8 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 sm:h-20 gap-4">
             
-            {/* Brand Logo & Name */}
-            <Link href="/" className="flex items-center gap-3 shrink min-w-0 group">
+            {/* Brand Logo & Name - Strictly Unshrinkable & Full Company Title */}
+            <Link href="/" className="flex items-center gap-3 shrink-0 group">
               <div className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-2xl bg-white/5 p-1.5 border border-white/10 group-hover:border-rose-500/40 group-hover:scale-105 transition-all duration-300 shadow-sm">
                 <Image
                   src="/images/brand/logo-mark.png"
@@ -137,12 +137,12 @@ export default function Navbar() {
                   priority
                 />
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-sm sm:text-base lg:text-lg font-black tracking-tight text-white group-hover:text-rose-300 transition-colors whitespace-nowrap truncate">
-                  {settings.company_name || 'بی‌سان سام یزد'}
+              <div className="flex flex-col shrink-0">
+                <span className="text-base sm:text-lg lg:text-xl font-black tracking-tight text-white group-hover:text-rose-300 transition-colors whitespace-nowrap">
+                  {settings.company_name || 'شرکت بی‌سان سام یزد'}
                 </span>
-                <span className="text-[10px] text-gray-400 font-medium truncate hidden sm:block">
-                  فرآوری و تامین تخصصی گوشت
+                <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap hidden sm:block">
+                  مجتمع فرآوری و تامین گوشت
                 </span>
               </div>
             </Link>

@@ -72,6 +72,15 @@ export const metadata: Metadata = {
     title: "شرکت بی‌سان سام یزد | گوشت تازه و فرآورده‌های دامی",
     description: "کشتار صنعتی بهداشتی و توزیع گوشت گرم و منجمد تحت نظارت سازمان دامپزشکی در استان یزد و سراسر کشور.",
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '192x192' },
+    ],
+    apple: [
+      { url: '/icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({

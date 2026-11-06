@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function MeatCutGuide() {
   const [activeTab, setActiveTab] = useState<'beef' | 'lamb' | 'camel'>('beef');
@@ -93,113 +94,120 @@ export default function MeatCutGuide() {
   const currentGuide = guides[activeTab];
 
   return (
-    <section className="py-16 sm:py-24 bg-[#14151a] text-white border-b border-[#252733] relative overflow-hidden">
-      {/* Subtle ambient gradient */}
+    <section className="py-20 sm:py-28 bg-[#0f1013] text-white border-y border-white/5 relative overflow-hidden">
+      {/* Subtle ambient gradients */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-rose-950/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-sky-950/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-amber-950/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#292c38] pb-6 gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 bg-[#22242e] border border-[#353846] px-3 py-1 rounded-full text-xs font-bold text-rose-300">
-              <span>راهنمای فنی سرآشپزان و مصرف‌کنندگان</span>
+        <ScrollReveal direction="up">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-white/10 pb-6 gap-5">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1 rounded-full text-xs font-bold text-rose-300">
+                <span>دانشنامه تخصصی قصابی صنعتی و طبخ</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-white">
+                آناتومی لاشه و راهنمای انتخاب هوشمندانه برش
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
+                هر عضله دام به دلیل میزان فعالیت حرکتی و کلاژن بافتی، نیازمند شیوه طبخ متفاوتی است. با شناخت برش‌ها، کیفیت نهایی خوراک را تضمین نمایید.
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-white">
-              دانش آناتومی لاشه و انتخاب هوشمندانه برش
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
-              هر عضله دام به دلیل میزان فعالیت حرکتی و کلاژن بافتی، نیازمند شیوه طبخ متفاوتی است. با شناخت برش‌ها، کیفیت نهایی خوراک را به اوج برسانید.
-            </p>
-          </div>
 
-          {/* Animal Tabs Switcher */}
-          <div className="flex items-center gap-2 bg-[#1b1c23] p-1.5 rounded-2xl border border-[#2e313e] shrink-0">
-            <button
-              onClick={() => setActiveTab('beef')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                activeTab === 'beef'
-                  ? 'bg-[#9f1239] text-white shadow-md'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              گوساله پرواری
-            </button>
-            <button
-              onClick={() => setActiveTab('lamb')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                activeTab === 'lamb'
-                  ? 'bg-[#9f1239] text-white shadow-md'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              گوسفند و بره
-            </button>
-            <button
-              onClick={() => setActiveTab('camel')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                activeTab === 'camel'
-                  ? 'bg-[#9f1239] text-white shadow-md'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              شتر کویر یزد
-            </button>
+            {/* Animal Tabs Switcher */}
+            <div className="flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10 shrink-0">
+              <button
+                onClick={() => setActiveTab('beef')}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                  activeTab === 'beef'
+                    ? 'bg-[#9f1239] text-white shadow-md'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                گوساله پرواری
+              </button>
+              <button
+                onClick={() => setActiveTab('lamb')}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                  activeTab === 'lamb'
+                    ? 'bg-[#9f1239] text-white shadow-md'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                گوسفند و بره
+              </button>
+              <button
+                onClick={() => setActiveTab('camel')}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                  activeTab === 'camel'
+                    ? 'bg-[#9f1239] text-white shadow-md'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                شتر کویر یزد
+              </button>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Active Tab Header */}
-        <div className="mb-8 text-right">
-          <h3 className="text-xl sm:text-2xl font-black text-rose-300">
-            {currentGuide.title}
-          </h3>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            {currentGuide.subtitle}
-          </p>
-        </div>
+        <ScrollReveal direction="up" delay={100}>
+          <div className="mb-10 text-right">
+            <h3 className="text-xl sm:text-2xl font-black text-rose-300">
+              {currentGuide.title}
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1.5">
+              {currentGuide.subtitle}
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* 3 Cut Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {currentGuide.cuts.map((cut, index) => (
-            <div
+            <ScrollReveal
               key={index}
-              className="bg-[#1b1c23] border border-[#2b2d39] rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-5 hover:border-rose-800/60 hover:shadow-xl transition-all duration-300 group"
+              direction="up"
+              delay={index * 120}
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-9 h-9 rounded-xl bg-rose-950/80 text-rose-300 font-bold text-xs flex items-center justify-center border border-rose-800/40">
-                    ۰{index + 1}
-                  </span>
-                  <span className="text-[11px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-3 py-0.5 rounded-full">
-                    {cut.tenderness}
-                  </span>
+              <div className="bg-[#15161b] border border-white/10 rounded-3xl p-6 sm:p-7 flex flex-col justify-between space-y-6 hover:border-rose-800/60 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 group h-full">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="w-9 h-9 rounded-xl bg-rose-950/80 text-rose-300 font-bold text-xs flex items-center justify-center border border-rose-800/40">
+                      ۰{index + 1}
+                    </span>
+                    <span className="text-[11px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-3 py-1 rounded-full">
+                      {cut.tenderness}
+                    </span>
+                  </div>
+
+                  <h4 className="text-base sm:text-lg font-black text-white group-hover:text-rose-300 transition-colors">
+                    {cut.name}
+                  </h4>
+
+                  <div className="bg-white/5 p-3.5 rounded-2xl border border-white/5 space-y-1">
+                    <span className="text-[10px] text-gray-400 font-bold block">پیشنهاد سرآشپز:</span>
+                    <span className="text-xs font-bold text-amber-300 block">{cut.bestFor}</span>
+                  </div>
+
+                  <p className="text-xs text-gray-300 leading-relaxed font-normal">
+                    {cut.desc}
+                  </p>
                 </div>
 
-                <h4 className="text-base sm:text-lg font-black text-white group-hover:text-rose-300 transition-colors">
-                  {cut.name}
-                </h4>
-
-                <div className="bg-[#242632] p-3 rounded-2xl border border-white/5 space-y-1">
-                  <span className="text-[10px] text-gray-400 font-bold block">بهترین روش پخت:</span>
-                  <span className="text-xs font-bold text-amber-300 block">{cut.bestFor}</span>
+                <div className="pt-4 border-t border-white/10">
+                  <Link
+                    href={cut.link}
+                    className="text-xs font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>مشاهده محصولات این برش در کاتالوگ</span>
+                    <span className="rotate-180 transition-transform group-hover:-translate-x-1">←</span>
+                  </Link>
                 </div>
-
-                <p className="text-xs text-gray-300 leading-relaxed font-normal">
-                  {cut.desc}
-                </p>
               </div>
-
-              <div className="pt-4 border-t border-[#292c38]">
-                <Link
-                  href={cut.link}
-                  className="text-xs font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1.5 transition-colors"
-                >
-                  <span>مشاهده محصولات این برش در کاتالوگ</span>
-                  <span className="rotate-180">←</span>
-                </Link>
-              </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 

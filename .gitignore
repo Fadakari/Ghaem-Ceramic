@@ -23,6 +23,7 @@ frontend/.env.production.local
 
 # Deployment archives (keep repo lightweight)
 *.zip
+build_artifacts/
 
 # Staticfiles build cache
 backend/staticfiles/

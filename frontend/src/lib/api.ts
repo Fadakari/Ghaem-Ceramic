@@ -6,30 +6,30 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.bisa
 export async function getCompanyBundle(): Promise<CompanyBundle> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/company/bundle/`, {
-      next: { revalidate: 60 },
+      cache: 'no-store',
       headers: {
         'Accept': 'application/json',
       },
     });
 
     if (!res.ok) {
-      console.warn(`Failed to fetch from backend (Status: ${res.status}), using default meat catalog dataset.`);
+      console.warn(`Failed to fetch from backend (Status: ${res.status}), using fallback dataset.`);
       return defaultCompanyBundle;
     }
 
     const data = await res.json();
     return {
       settings: data.settings || defaultCompanyBundle.settings,
-      categories: data.categories?.length > 0 ? data.categories : defaultCompanyBundle.categories,
-      featured_products: data.featured_products?.length > 0 ? data.featured_products : defaultCompanyBundle.featured_products,
-      products: data.products?.length > 0 ? data.products : (data.featured_products || defaultCompanyBundle.featured_products),
-      services: data.services?.length > 0 ? data.services : defaultCompanyBundle.services,
-      standards: data.standards?.length > 0 ? data.standards : defaultCompanyBundle.standards,
-      articles: data.articles?.length > 0 ? data.articles : defaultCompanyBundle.articles,
-      faqs: data.faqs?.length > 0 ? data.faqs : defaultCompanyBundle.faqs,
+      categories: Array.isArray(data.categories) ? data.categories : defaultCompanyBundle.categories,
+      featured_products: Array.isArray(data.featured_products) ? data.featured_products : defaultCompanyBundle.featured_products,
+      products: Array.isArray(data.products) ? data.products : (data.featured_products || defaultCompanyBundle.featured_products),
+      services: Array.isArray(data.services) ? data.services : defaultCompanyBundle.services,
+      standards: Array.isArray(data.standards) ? data.standards : defaultCompanyBundle.standards,
+      articles: Array.isArray(data.articles) ? data.articles : defaultCompanyBundle.articles,
+      faqs: Array.isArray(data.faqs) ? data.faqs : defaultCompanyBundle.faqs,
     };
   } catch (error) {
-    console.warn("Backend API not reachable currently, loading cached catalog data.", error);
+    console.warn("Backend API not reachable currently, loading fallback data.", error);
     return defaultCompanyBundle;
   }
 }

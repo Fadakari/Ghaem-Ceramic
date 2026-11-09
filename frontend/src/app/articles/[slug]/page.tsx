@@ -12,6 +12,10 @@ interface ArticlePageProps {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+
 export async function generateStaticParams() {
   const articles = await getArticles();
   return articles.map((art) => ({

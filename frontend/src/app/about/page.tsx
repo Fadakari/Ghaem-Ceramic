@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AboutPage() {
   const data = await getCompanyBundle();
   const settings = data.settings;

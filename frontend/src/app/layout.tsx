@@ -2,8 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { CompanyProvider } from "@/context/CompanyContext";
+import { getCompanyBundle } from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -83,11 +87,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const companyData = await getCompanyBundle();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -151,7 +157,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[#faf8f5] text-[#1f2937] font-sans flex flex-col antialiased">
-        <CompanyProvider>
+        <CompanyProvider initialData={companyData}>
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />

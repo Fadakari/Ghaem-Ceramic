@@ -12,6 +12,10 @@ interface ProductPageProps {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+
 export async function generateStaticParams() {
   const bundle = await getCompanyBundle();
   const products = bundle.products?.length > 0 ? bundle.products : bundle.featured_products;

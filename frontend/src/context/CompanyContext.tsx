@@ -23,18 +23,20 @@ export const CompanyProvider: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // If initial data is missing some populated products or settings, refresh from API in background
+    setData(initialData);
+  }, [initialData]);
+
+  useEffect(() => {
     let isMounted = true;
     async function loadFresh() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/company/bundle/`);
+        const res = await fetch(`${API_BASE_URL}/api/company/bundle/`, {
+          cache: 'no-store',
+        });
         if (res.ok) {
           const fresh = await res.json();
           if (isMounted && fresh.settings) {
-            setData((prev) => ({
-              ...prev,
-              ...fresh,
-            }));
+            setData(fresh);
           }
         }
       } catch {

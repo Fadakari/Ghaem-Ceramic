@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function ProductsPage() {
   const data = await getCompanyBundle();
   const products = data.products?.length > 0 ? data.products : (data.featured_products || []);

@@ -4,6 +4,7 @@ export const defaultCompanyBundle: CompanyBundle = {
   settings: {
     company_name_fa: "شرکت بهبود سرامیک",
     company_name_en: "Behbod Ceramic Industry",
+    logo: "/images/brand/logo-mark.svg",
     tagline: "تولیدکننده تخصصی قطعات و سرامیک‌های ضد سایش آلومینایی میکروبلورین (Microcrystal Alumina)",
     hero_badge: "بومی‌سازی پوشش‌های صنعتی با استانداردهای بین‌المللی ASTM و ISO",
     hero_title: "پوشش‌های سرامیکی ضد سایش؛ تحولی بنیادین در حذف استهلاک و توقف خطوط تولید",

@@ -4,6 +4,7 @@ class SiteSetting(models.Model):
     """تنظیمات کلی و اطلاعات اصلی وب‌سایت بهبود سرامیک"""
     company_name_fa = models.CharField(max_length=200, default="شرکت بهبود سرامیک", verbose_name="نام شرکت (فارسی)")
     company_name_en = models.CharField(max_length=200, default="Behbod Ceramic Industry", verbose_name="نام شرکت (انگلیسی)")
+    logo = models.ImageField(upload_to='brand/', blank=True, null=True, verbose_name="لوگوی شرکت")
     tagline = models.CharField(max_length=300, default="تولیدکننده تخصصی قطعات و سرامیک‌های ضد سایش آلومینایی میکروبلورین", verbose_name="شعار یا معرفی کوتاه")
     
     hero_badge = models.CharField(max_length=150, default="پیشگام بومی‌سازی پوشش‌های ضد سایش در صنایع سنگین کشور", verbose_name="نشان بالای هدر")

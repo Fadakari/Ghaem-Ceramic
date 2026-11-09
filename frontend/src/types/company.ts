@@ -2,6 +2,7 @@ export interface SiteSetting {
   id?: number;
   company_name_fa: string;
   company_name_en: string;
+  logo?: string | null;
   tagline: string;
   hero_badge: string;
   hero_title: string;

@@ -5,8 +5,8 @@ from .models import (
     IndustrySector, ProjectTestimonial, ContactInquiry
 )
 
-admin.site.site_header = "سامانه مدیریت محتوای شرکت سرامیک صنعت قائم"
-admin.site.site_title = "پنل مدیریت سرامیک صنعت قائم"
+admin.site.site_header = "سامانه مدیریت محتوای شرکت بهبود سرامیک"
+admin.site.site_title = "پنل مدیریت بهبود سرامیک"
 admin.site.index_title = "مدیریت بخش‌ها، متون و مشخصات فنی سایت"
 
 @admin.register(SiteSetting)
@@ -14,7 +14,7 @@ class SiteSettingAdmin(admin.ModelAdmin):
     list_display = ('company_name_fa', 'phone', 'email', 'updated_at')
     fieldsets = (
         ('اطلاعات عمومی شرکت', {
-            'fields': ('company_name_fa', 'company_name_en', 'tagline', 'manager_name')
+            'fields': ('company_name_fa', 'company_name_en', 'logo', 'tagline', 'manager_name')
         }),
         ('بخش بنر و معرفی اصلی (Hero)', {
             'fields': ('hero_badge', 'hero_title', 'hero_subtitle')

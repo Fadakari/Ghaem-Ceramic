@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CompanyBundle } from '../types/company';
 import { defaultCompanyBundle } from '../lib/defaultData';
+import { API_BASE_URL } from '../lib/api';
 
 interface CompanyContextType {
   data: CompanyBundle;
@@ -26,7 +27,7 @@ export const CompanyProvider: React.FC<{
     let isMounted = true;
     async function loadFresh() {
       try {
-        const res = await fetch('/api/company/bundle/');
+        const res = await fetch(`${API_BASE_URL}/api/company/bundle/`);
         if (res.ok) {
           const fresh = await res.json();
           if (isMounted && fresh.settings) {

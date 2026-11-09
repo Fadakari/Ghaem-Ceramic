@@ -1,7 +1,7 @@
 import { CompanyBundle, Product, Article, ContactInquiry } from '../types/company';
 import { defaultCompanyBundle } from './defaultData';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.bisansamyazd.ir';
 
 export async function getCompanyBundle(): Promise<CompanyBundle> {
   try {

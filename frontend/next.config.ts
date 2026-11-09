@@ -31,7 +31,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "www.behbodceramic.ir",
+      },
+      {
+        protocol: "https",
         hostname: "api.behbodceramic.ir",
+      },
+      {
+        protocol: "https",
+        hostname: "www.api.behbodceramic.ir",
       },
     ],
   },
@@ -57,7 +65,7 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.behbodceramic.ir";
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "https://www.api.behbodceramic.ir";
     return [
       {
         source: "/media/:path*",

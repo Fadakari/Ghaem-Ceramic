@@ -1,11 +1,36 @@
 import { CompanyBundle, ContactFormData } from '../types/company';
 import { defaultCompanyBundle } from './defaultData';
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.behbodceramic.ir';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://www.api.behbodceramic.ir';
+
+const CANDIDATE_BASE_URLS = Array.from(new Set([
+  process.env.NEXT_PUBLIC_API_URL,
+  'https://www.api.behbodceramic.ir',
+  'http://api.behbodceramic.ir',
+  'https://api.behbodceramic.ir',
+  'http://127.0.0.1:8000',
+].filter(Boolean))) as string[];
+
+export async function fetchWithFallback(endpoint: string, options: RequestInit = {}): Promise<Response> {
+  let lastError: any = null;
+  for (const base of CANDIDATE_BASE_URLS) {
+    try {
+      const cleanBase = base.replace(/\/+$/, '');
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      const res = await fetch(`${cleanBase}${cleanEndpoint}`, options);
+      if (res.ok) {
+        return res;
+      }
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError || new Error(`Failed to fetch ${endpoint} from backend`);
+}
 
 export async function getCompanyBundle(): Promise<CompanyBundle> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/company/bundle/?_t=${Date.now()}`, {
+    const res = await fetchWithFallback(`/api/company/bundle/?_t=${Date.now()}`, {
       cache: 'no-store', // Always fetch latest data from Django Admin
       headers: {
         'Accept': 'application/json',
@@ -14,11 +39,6 @@ export async function getCompanyBundle(): Promise<CompanyBundle> {
         'Expires': '0',
       },
     });
-
-    if (!res.ok) {
-      console.warn(`Failed to fetch from backend (Status: ${res.status}), using default catalog dataset.`);
-      return defaultCompanyBundle;
-    }
 
     const data = await res.json();
     return {
@@ -40,7 +60,7 @@ export async function getCompanyBundle(): Promise<CompanyBundle> {
 
 export async function submitContactInquiry(data: ContactFormData): Promise<{ success: boolean; message: string }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/company/contact/`, {
+    const res = await fetchWithFallback('/api/company/contact/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

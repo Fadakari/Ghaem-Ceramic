@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { CompanyBundle, SiteSetting, KeyStat, CeramicAdvantage, CeramicProductForm, TechnicalProperty, ProductionStep, InstallationMethod, IndustrySector, ProjectTestimonial } from "@/types/company";
 import { defaultCompanyBundle } from "@/lib/defaultData";
-import { API_BASE_URL } from "@/lib/api";
+import { API_BASE_URL, fetchWithFallback } from "@/lib/api";
 
 interface CompanyContextType {
   bundle: CompanyBundle;
@@ -52,7 +52,7 @@ export function CompanyProvider({
   const fetchLiveBundle = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`${API_BASE_URL}/api/company/bundle/?_t=${Date.now()}`, {
+      const res = await fetchWithFallback(`/api/company/bundle/?_t=${Date.now()}`, {
         cache: "no-store",
         headers: {
           "Accept": "application/json",

@@ -30,8 +30,14 @@ export const CompanyProvider: React.FC<{
     let isMounted = true;
     async function loadFresh() {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/company/bundle/`, {
+        const res = await fetch(`${API_BASE_URL}/api/company/bundle/?_t=${Date.now()}`, {
           cache: 'no-store',
+          headers: {
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
         });
         if (res.ok) {
           const fresh = await res.json();

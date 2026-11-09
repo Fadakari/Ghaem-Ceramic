@@ -5,10 +5,13 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.bisa
 
 export async function getCompanyBundle(): Promise<CompanyBundle> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/company/bundle/`, {
+    const res = await fetch(`${API_BASE_URL}/api/company/bundle/?_t=${Date.now()}`, {
       cache: 'no-store',
       headers: {
         'Accept': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
       },
     });
 

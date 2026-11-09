@@ -1,14 +1,17 @@
 import { CompanyBundle, ContactFormData } from '../types/company';
 import { defaultCompanyBundle } from './defaultData';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.behbodceramic.ir';
 
 export async function getCompanyBundle(): Promise<CompanyBundle> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/company/bundle/`, {
+    const res = await fetch(`${API_BASE_URL}/api/company/bundle/?_t=${Date.now()}`, {
       cache: 'no-store', // Always fetch latest data from Django Admin
       headers: {
         'Accept': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
       },
     });
 
@@ -20,14 +23,14 @@ export async function getCompanyBundle(): Promise<CompanyBundle> {
     const data = await res.json();
     return {
       settings: data.settings || defaultCompanyBundle.settings,
-      stats: data.stats && data.stats.length > 0 ? data.stats : defaultCompanyBundle.stats,
-      advantages: data.advantages && data.advantages.length > 0 ? data.advantages : defaultCompanyBundle.advantages,
-      products: data.products && data.products.length > 0 ? data.products : defaultCompanyBundle.products,
-      specs: data.specs && data.specs.length > 0 ? data.specs : defaultCompanyBundle.specs,
-      production_steps: data.production_steps && data.production_steps.length > 0 ? data.production_steps : defaultCompanyBundle.production_steps,
-      installation_methods: data.installation_methods && data.installation_methods.length > 0 ? data.installation_methods : defaultCompanyBundle.installation_methods,
-      industries: data.industries && data.industries.length > 0 ? data.industries : defaultCompanyBundle.industries,
-      testimonials: data.testimonials && data.testimonials.length > 0 ? data.testimonials : defaultCompanyBundle.testimonials,
+      stats: Array.isArray(data.stats) ? data.stats : defaultCompanyBundle.stats,
+      advantages: Array.isArray(data.advantages) ? data.advantages : defaultCompanyBundle.advantages,
+      products: Array.isArray(data.products) ? data.products : defaultCompanyBundle.products,
+      specs: Array.isArray(data.specs) ? data.specs : defaultCompanyBundle.specs,
+      production_steps: Array.isArray(data.production_steps) ? data.production_steps : defaultCompanyBundle.production_steps,
+      installation_methods: Array.isArray(data.installation_methods) ? data.installation_methods : defaultCompanyBundle.installation_methods,
+      industries: Array.isArray(data.industries) ? data.industries : defaultCompanyBundle.industries,
+      testimonials: Array.isArray(data.testimonials) ? data.testimonials : defaultCompanyBundle.testimonials,
     };
   } catch (error) {
     console.warn("Backend API not reachable currently, loading cached catalog data.", error);

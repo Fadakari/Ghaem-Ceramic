@@ -1,9 +1,9 @@
 from django.db import models
 
 class SiteSetting(models.Model):
-    """تنظیمات کلی و اطلاعات اصلی وب‌سایت سرامیک صنعت قائم"""
-    company_name_fa = models.CharField(max_length=200, default="شرکت سرامیک صنعت قائم", verbose_name="نام شرکت (فارسی)")
-    company_name_en = models.CharField(max_length=200, default="Ghaem Ceramic Industry", verbose_name="نام شرکت (انگلیسی)")
+    """تنظیمات کلی و اطلاعات اصلی وب‌سایت بهبود سرامیک"""
+    company_name_fa = models.CharField(max_length=200, default="شرکت بهبود سرامیک", verbose_name="نام شرکت (فارسی)")
+    company_name_en = models.CharField(max_length=200, default="Behbod Ceramic Industry", verbose_name="نام شرکت (انگلیسی)")
     tagline = models.CharField(max_length=300, default="تولیدکننده تخصصی قطعات و سرامیک‌های ضد سایش آلومینایی میکروبلورین", verbose_name="شعار یا معرفی کوتاه")
     
     hero_badge = models.CharField(max_length=150, default="پیشگام بومی‌سازی پوشش‌های ضد سایش در صنایع سنگین کشور", verbose_name="نشان بالای هدر")
@@ -11,20 +11,20 @@ class SiteSetting(models.Model):
     hero_subtitle = models.TextField(default="جایگزین قطعی فولادهای هاردوکس با سختی ۹ موهس، مقاومت حرارتی تا ۸۰۰ درجه و حداقل ۴ برابر طول عمر بیشتر در مواجهه با شدیدترین سایش‌ها و محیط‌های خورنده شیمیایی.", verbose_name="زیرعنوان هدر")
     
     about_title = models.CharField(max_length=250, default="بیش از یک دهه نوآوری و مهندسی مواد پیشرفته در صنایع سنگین", verbose_name="عنوان درباره ما")
-    about_text_1 = models.TextField(default="شرکت سرامیک صنعت قائم از سال ۱۳۹۰ به عنوان تخصصی‌ترین واحد مشاوره، طراحی، تولید، تأمین و نصب سرامیک‌های ضد سایش آلومینایی در کشور فعالیت خود را آغاز نموده است.", verbose_name="متن درباره ما - بخش اول")
-    about_text_2 = models.TextField(default="همواره در صنایع بزرگ نظیر فولاد، سیمان، مس و پتروشیمی، سایش و خوردگی مداوم ماشین‌آلات هزینه‌های گزافی به واسطه توقف‌های مکرر خط تولید تحمیل می‌کند. استفاده از فلزات ضد سایش مانند هاردوکس به دلیل ضعف در برابر حرارت، اسیدها و مواد خورنده پاسخگوی نیاز نیست. سرامیک‌های آلومینایی قائم با تکیه بر فرمولاسیون نوین و پخت در کوره تونلی ۱۶۰۰ درجه، جایگزین مطمئنی است که طول عمر تجهیزات را چند برابر افزایش می‌دهد.", verbose_name="متن درباره ما - بخش دوم")
+    about_text_1 = models.TextField(default="شرکت بهبود سرامیک از سال ۱۳۹۰ به عنوان تخصصی‌ترین واحد مشاوره، طراحی، تولید، تأمین و نصب سرامیک‌های ضد سایش آلومینایی در کشور فعالیت خود را آغاز نموده است.", verbose_name="متن درباره ما - بخش اول")
+    about_text_2 = models.TextField(default="همواره در صنایع بزرگ نظیر فولاد، سیمان، مس و پتروشیمی، سایش و خوردگی مداوم ماشین‌آلات هزینه‌های گزافی به واسطه توقف‌های مکرر خط تولید تحمیل می‌کند. استفاده از فلزات ضد سایش مانند هاردوکس به دلیل ضعف در برابر حرارت، اسیدها و مواد خورنده پاسخگوی نیاز نیست. سرامیک‌های آلومینایی با تکیه بر فرمولاسیون نوین و پخت در کوره تونلی ۱۶۰۰ درجه، جایگزین مطمئنی است که طول عمر تجهیزات را چند برابر افزایش می‌دهد.", verbose_name="متن درباره ما - بخش دوم")
     
     phone = models.CharField(max_length=50, default="035-37301340", verbose_name="تلفن تماس")
     fax = models.CharField(max_length=50, default="035-37301320", verbose_name="فکس")
     email = models.EmailField(default="sales.csgh@gmail.com", verbose_name="پست الکترونیک")
-    website = models.CharField(max_length=100, default="www.pssgh.ir", verbose_name="آدرس وب‌سایت")
+    website = models.CharField(max_length=100, default="www.behbodceramic.ir", verbose_name="آدرس وب‌سایت")
     address = models.CharField(max_length=300, default="یزد، بلوار پاسداران، مجتمع مهران، طبقه ۳، واحد D31", verbose_name="نشانی دفتر مرکزی")
     manager_name = models.CharField(max_length=100, default="جناب آقای مهندس زارع", verbose_name="مدیریت شرکت")
     
-    catalog_title = models.CharField(max_length=150, default="کاتالوگ جامع مهندسی سرامیک صنعت قائم", verbose_name="عنوان کاتالوگ")
+    catalog_title = models.CharField(max_length=150, default="کاتالوگ جامع مهندسی بهبود سرامیک", verbose_name="عنوان کاتالوگ")
     catalog_url = models.CharField(max_length=300, blank=True, default="", verbose_name="لینک مستقیم دانلود کاتالوگ")
     
-    meta_title = models.CharField(max_length=250, default="شرکت سرامیک صنعت قائم | سرامیک‌های ضد سایش آلومینا و جایگزین هاردوکس", verbose_name="عنوان سئو (Title)")
+    meta_title = models.CharField(max_length=250, default="شرکت بهبود سرامیک | سرامیک‌های ضد سایش آلومینا و جایگزین هاردوکس", verbose_name="عنوان سئو (Title)")
     meta_description = models.TextField(default="تولید تخصصی انواع لاینرها، تایل‌ها، موزاییک‌های شش ضلعی و قطعات سرامیکی ضد سایش آلومینایی با سختی ۹ موهس برای شوت‌ها، هاپرها و لوله‌های صنایع فولاد، مس، سیمان و پتروشیمی.", verbose_name="توضیحات سئو (Description)")
     
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ آخرین بروزرسانی")

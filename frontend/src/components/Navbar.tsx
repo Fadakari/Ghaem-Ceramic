@@ -16,8 +16,8 @@ export default function Navbar({ settings }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const companyNameFa = effectiveSettings?.company_name_fa || "سرامیک صنعت قائم";
-  const companyNameEn = effectiveSettings?.company_name_en || "GHAEM CERAMIC";
+  const companyNameFa = effectiveSettings?.company_name_fa || "شرکت بهبود سرامیک";
+  const companyNameEn = effectiveSettings?.company_name_en || "BEHBOD CERAMIC";
   const phone = effectiveSettings?.phone || "035-37301340";
   const phoneHref = `tel:${phone.replace(/[^0-9+]/g, "")}`;
 
@@ -77,7 +77,11 @@ export default function Navbar({ settings }: NavbarProps) {
             {/* Logo Brand (Strictly contained, never causes overflow) */}
             <a href="#" className="flex items-center gap-2.5 sm:gap-3 shrink-0 group">
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-[#ff4500] via-[#ff6a00] to-[#ffa500] flex items-center justify-center text-white shadow-md shadow-orange-500/25 shrink-0 group-hover:scale-105 transition-transform">
-                <span className="font-black text-lg sm:text-xl tracking-tighter">G</span>
+                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                  <polyline points="2 17 12 22 22 17" />
+                  <polyline points="2 12 12 17 22 12" />
+                </svg>
               </div>
               <div className="flex flex-col shrink-0">
                 <span className="font-black text-sm sm:text-base lg:text-lg text-slate-900 leading-tight whitespace-nowrap">
@@ -155,8 +159,12 @@ export default function Navbar({ settings }: NavbarProps) {
             {/* Drawer Header */}
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-[#ff4500] to-[#ffa500] flex items-center justify-center text-white font-black text-base shadow-xs">
-                  G
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-[#ff4500] to-[#ffa500] flex items-center justify-center text-white shadow-xs">
+                  <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                    <polyline points="2 17 12 22 22 17" />
+                    <polyline points="2 12 12 17 22 12" />
+                  </svg>
                 </div>
                 <div className="flex flex-col">
                   <span className="font-bold text-sm text-slate-900 whitespace-nowrap">{companyNameFa}</span>

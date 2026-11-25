@@ -8,6 +8,7 @@ from .models import (
     Article,
     FAQ,
     ContactInquiry,
+    Facility,
 )
 
 
@@ -23,9 +24,18 @@ class CompanySettingAdmin(admin.ModelAdmin):
 
 @admin.register(ProductCategory)
 class ProductCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'icon', 'order')
+    list_display = ('name', 'slug', 'subtitle', 'order')
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ('order',)
+
+
+@admin.register(Facility)
+class FacilityAdmin(admin.ModelAdmin):
+    list_display = ('title', 'badge', 'capacity', 'order', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('title', 'subtitle', 'description', 'features')
+    list_editable = ('order', 'is_active')
+    prepopulated_fields = {'key_slug': ('title',)}
 
 
 @admin.register(Product)

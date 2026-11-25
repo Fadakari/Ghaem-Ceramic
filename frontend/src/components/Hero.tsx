@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCompany } from '@/context/CompanyContext';
@@ -11,183 +11,236 @@ export default function Hero() {
   const { data } = useCompany();
   const settings = data.settings;
 
-  // Resolve dynamic image path (backend URL, media rewrite, or public fallback)
-  const heroImageSrc = getSafeImageUrl(settings.hero_image, '/images/hero/hero-craft-meat.jpg');
+  // Resolve multiple hero slide images from backend bundle
+  const slides = useMemo(() => {
+    const list: string[] = [];
+    if (settings.hero_images && settings.hero_images.length > 0) {
+      settings.hero_images.forEach((img) => {
+        if (img && img.trim()) list.push(getSafeImageUrl(img));
+      });
+    } else {
+      if (settings.hero_image) list.push(getSafeImageUrl(settings.hero_image));
+      if (settings.hero_image_2) list.push(getSafeImageUrl(settings.hero_image_2));
+      if (settings.hero_image_3) list.push(getSafeImageUrl(settings.hero_image_3));
+    }
+
+    // Deduplicate
+    const unique = Array.from(new Set(list));
+    if (unique.length > 0) return unique;
+
+    // Fallbacks if backend has none
+    return [
+      '/images/hero/hero-craft-meat.jpg',
+      '/images/hero/hero-beef-ribeye.jpg',
+      '/images/facilities/facility-1.jpg',
+    ];
+  }, [settings.hero_images, settings.hero_image, settings.hero_image_2, settings.hero_image_3]);
+
+  // Current slide index
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-scroll slides every 5.5 seconds
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   return (
-    <section className="relative bg-[#0a0b0e] text-white overflow-hidden border-b border-white/5">
-      {/* Background with Ambient Vignette & High-Res Photography */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="relative w-full h-full">
-          <Image
-            src={heroImageSrc}
-            alt="فرآورده‌های پروتئینی و گوشت گرم بی‌سان سام یزد"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center opacity-25 filter contrast-115"
-          />
-        </div>
-        {/* Soft luxury ambient gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0b0e] via-[#0a0b0e]/85 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0b0e] via-[#0a0b0e]/95 to-transparent" />
-        <div className="absolute top-1/4 -right-48 w-96 h-96 bg-rose-900/15 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative w-full overflow-hidden select-none flex flex-col justify-between min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] bg-[#0a0b0e]">
+      
+      {/* 
+        Full-Width Auto-Sliding Dynamic Background Photography (Backend Powered)
+        Smooth crossfade between slides with scale micro-transition
+      */}
+      <div className="absolute inset-0 z-0">
+        {slides.map((src, idx) => {
+          const isActive = idx === currentSlide;
+          return (
+            <div
+              key={`${src}-${idx}`}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
+            >
+              <Image
+                src={src}
+                alt={settings.company_name || 'صنایع گوشت بی‌سان سام یزد'}
+                fill
+                priority={idx === 0}
+                sizes="100vw"
+                className={`object-cover object-center brightness-95 contrast-105 transition-transform duration-[6000ms] ease-out ${
+                  isActive ? 'scale-105' : 'scale-100'
+                }`}
+              />
+            </div>
+          );
+        })}
+        
+        {/* 
+          Smart Directional Contrast Gradients:
+          Heavy dark vignette on the right for Persian text clarity,
+          subtle vignette overall to preserve photography vibrancy
+        */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-l from-black/95 via-black/65 to-black/30 pointer-events-none" />
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-transparent to-black/40 pointer-events-none" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      {/* 
+        Main Content Container:
+        Sits in normal document flow with comfortable padding.
+        The action buttons are completely separate and have natural vertical distance above the ribbon!
+      */}
+      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-14 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 flex-1 flex flex-col justify-center">
+        <div className="max-w-3xl space-y-5 text-right">
           
-          {/* Main Headline & Description */}
-          <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-right">
-            
-            <ScrollReveal direction="up" delay={50}>
-              {/* Trust Badge - Single Clean Minimalist Pill */}
-              <div className="inline-flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 backdrop-blur-md">
-                <span className="flex h-2 w-2 relative shrink-0">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="text-xs font-bold text-gray-200">
-                  {settings.hero_badge || 'کشتارگاه صنعتی رتبه کیفی A+'}
-                </span>
-                <span className="text-xs text-rose-400 font-extrabold pr-2 border-r border-white/10">
-                  یزد
-                </span>
-              </div>
-            </ScrollReveal>
+          {/* Trust Badge Pill */}
+          <ScrollReveal direction="up" delay={50}>
+            <div className="inline-flex items-center gap-2 bg-black/60 backdrop-blur-md border border-white/20 rounded-full px-3.5 py-1 shadow-lg">
+              <span className="flex h-2.5 w-2.5 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-bold text-gray-100">
+                {settings.hero_badge || 'کشتارگاه صنعتی رتبه کیفی A+ یزد'}
+              </span>
+              <span className="text-xs text-rose-400 font-extrabold pr-2 border-r border-white/20">
+                نظارت مقیم دامپزشکی
+              </span>
+            </div>
+          </ScrollReveal>
 
-            <ScrollReveal direction="up" delay={150}>
-              {/* Main Title - Powerful & Elegant */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.25] sm:leading-[1.2] tracking-tight">
-                {settings.hero_title || 'تامین مستقیم و تخصصی گوشت گرم و فرآورده‌های پروتئینی'}
-              </h1>
-            </ScrollReveal>
+          {/* Main Headline - Bold, Crisp & High-Contrast */}
+          <ScrollReveal direction="up" delay={150}>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.2] sm:leading-[1.18] tracking-tight drop-shadow-md">
+              {settings.hero_title || 'تامین مستقیم و تخصصی گوشت گرم و فرآورده‌های پروتئینی'}
+            </h1>
+          </ScrollReveal>
 
-            <ScrollReveal direction="up" delay={250}>
-              {/* Subtitle - Crisp and Breathing */}
-              <p className="text-sm sm:text-base lg:text-lg text-gray-300 leading-relaxed max-w-2xl font-normal">
-                {settings.hero_subtitle || 'تأمین پایدار انواع گوشت گرم گوساله، گوسفندی، شتر ممتاز یزد و ماکیان؛ پایش برخط زنجیره سرمایش و توزیع روزانه برای هتل‌ها، رستوران‌ها، سازمان‌ها و خانوار.'}
-              </p>
-            </ScrollReveal>
+          {/* Subtitle with High Readability */}
+          <ScrollReveal direction="up" delay={250}>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed font-normal drop-shadow max-w-2xl">
+              {settings.hero_subtitle || 'تولید، قطعه‌بندی بهداشتی و بسته‌بندی در اتمسفر اصلاح‌شده (MAP) با حفظ زنجیره سرد ۰ تا ۲+ درجه سانتی‌گراد؛ تامین پایدار هتل‌ها، بیمارستان‌ها، هایپرمارکت‌ها و خانوار.'}
+            </p>
+          </ScrollReveal>
 
-            <ScrollReveal direction="up" delay={350}>
-              {/* Minimalist CTA Actions */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 pt-1">
-                <Link
-                  href="/products"
-                  className="btn-primary-meat px-8 py-4 text-sm sm:text-base font-bold shadow-2xl shadow-rose-950/60"
-                >
-                  <span>کاتالوگ و برش‌های تخصصی</span>
-                  <svg className="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </Link>
+          {/* Action Buttons - Always above the ribbon with distinct natural spacing */}
+          <ScrollReveal direction="up" delay={350}>
+            <div className="flex flex-wrap items-center gap-4 pt-3">
+              <Link
+                href="/products"
+                className="btn-primary-meat px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold shadow-2xl shadow-rose-950/80"
+              >
+                <span>مشاهده محصولات و برش‌ها</span>
+                <svg className="w-5 h-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
 
-                <Link
-                  href="/contact"
-                  className="btn-secondary-dark px-7 py-4 text-sm sm:text-base font-bold"
-                >
-                  <span>استعلام تامین عمده و B2B</span>
-                </Link>
-              </div>
-            </ScrollReveal>
+              <Link
+                href="/services"
+                className="px-7 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 rounded-2xl transition-all shadow-lg hover:-translate-y-0.5"
+              >
+                <span>استعلام تامین عمده و B2B</span>
+              </Link>
+            </div>
+          </ScrollReveal>
 
-          </div>
-
-          {/* Featured Visual Card - Pure Culinary Minimalism */}
-          <div className="lg:col-span-5">
-            <ScrollReveal direction="left" delay={200}>
-              <div className="relative mx-auto max-w-md lg:max-w-none group">
-                
-                {/* Ambient glow behind visual */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-rose-900/30 to-amber-700/20 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition duration-1000 pointer-events-none" />
-
-                <div className="relative rounded-3xl overflow-hidden bg-[#121317] border border-white/10 p-3 sm:p-3.5 shadow-2xl shadow-black/90">
-                  
-                  {/* Photo Container */}
-                  <div className="relative h-72 sm:h-96 w-full rounded-2xl overflow-hidden bg-black/50">
-                    <Image
-                      src={heroImageSrc}
-                      alt="برش ممتاز گوشت گوساله و گوسفندی"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
-                    />
-
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-                    
-                    {/* Top Floating Badge */}
-                    <div className="absolute top-4 right-4 left-4 flex items-center justify-between pointer-events-none z-10">
-                      <span className="badge-fresh shadow-xl">
-                        تضمین تازگی کشتار روز
-                      </span>
-                      <span className="badge-cold shadow-xl">
-                        زنجیره سرمایش ۰-۲°C
-                      </span>
-                    </div>
-
-                    {/* Frosted Bottom Pill */}
-                    <div className="absolute bottom-4 right-4 left-4 bg-black/80 backdrop-blur-md border border-white/10 rounded-2xl p-3.5 flex items-center justify-between text-white shadow-xl">
-                      <div>
-                        <div className="text-[10px] text-gray-400 font-medium">نظارت مقیم بهداشتی</div>
-                        <div className="text-xs sm:text-sm font-bold text-white mt-0.5">سازمان دامپزشکی کشور</div>
-                      </div>
-                      <div className="text-left">
-                        <div className="text-[10px] text-gray-400 font-medium">پایش برخط برودت</div>
-                        <div className="text-xs sm:text-sm font-bold text-sky-400 font-mono mt-0.5" dir="ltr">+1.8°C IoT</div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </ScrollReveal>
-          </div>
+          {/* Interactive Slide Indicator Dots */}
+          {slides.length > 1 && (
+            <div className="pt-2 flex items-center gap-2">
+              <span className="text-[11px] text-gray-400 ml-1 font-medium">تصاویر کارخانه و فرآوری:</span>
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  aria-label={`نمایش اسلاید ${idx + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    idx === currentSlide
+                      ? 'w-7 bg-[#c21414] shadow-md shadow-rose-900/60'
+                      : 'w-2 bg-white/35 hover:bg-white/60'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
 
         </div>
+      </div>
 
-        {/* Corporate Trust Ribbon - Spacious & Prestigious (NO clunky bourse boxes) */}
-        <ScrollReveal direction="up" delay={300}>
-          <div className="mt-14 sm:mt-24 pt-8 sm:pt-12 border-t border-white/10">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 divide-y sm:divide-y-0 sm:divide-x sm:divide-x-reverse divide-white/10">
-              <div className="text-center sm:text-right px-2 sm:px-6 pt-4 sm:pt-0">
-                <div className="text-3xl sm:text-4xl font-black text-rose-400 font-mono tracking-tight">
+      {/* 
+        Bottom Section:
+        1. Metrics Ribbon (hidden on small mobile, visible on tablet/desktop)
+        2. Organic Wave Separator - Smoothly curves into the white categories section!
+      */}
+      <div className="relative z-30 w-full mt-auto">
+        
+        {/* Quick Metrics Ribbon */}
+        <div className="w-full bg-black/70 backdrop-blur-md border-t border-white/10 py-3 sm:py-4 hidden md:block">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-4 gap-4 divide-x divide-x-reverse divide-white/10 text-center">
+              
+              <div className="px-2">
+                <span className="text-base sm:text-xl font-black text-rose-400 font-mono">
                   {settings.annual_tonnage || '۱۲,۰۰۰+ تن'}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-200 font-bold mt-2">ظرفیت تامین سالانه پروتئین</div>
-                <div className="text-[11px] text-gray-400 mt-1">توزیع کشوری و استانی پایدار</div>
+                </span>
+                <span className="text-xs text-gray-300 block font-medium mt-0.5">ظرفیت تامین سالانه</span>
               </div>
 
-              <div className="text-center sm:text-right px-2 sm:px-6 pt-4 sm:pt-0">
-                <div className="text-3xl sm:text-4xl font-black text-sky-400 font-mono tracking-tight">
+              <div className="px-2">
+                <span className="text-base sm:text-xl font-black text-sky-400 font-mono">
                   {settings.active_centers || '۱۸۰+ مرکز'}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-200 font-bold mt-2">مراکز درمانی و هورکا طرف قرارداد</div>
-                <div className="text-[11px] text-gray-400 mt-1">بیمارستان‌ها، هتل‌ها و رستوران‌ها</div>
+                </span>
+                <span className="text-xs text-gray-300 block font-medium mt-0.5">مراکز درمانی و هورکا</span>
               </div>
 
-              <div className="text-center sm:text-right px-2 sm:px-6 pt-4 sm:pt-0">
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight">
-                  {settings.cold_chain_temp || '۰ تا ۲+ درجه'}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-200 font-bold mt-2">پایش پیوسته زنجیره سرمایش</div>
-                <div className="text-[11px] text-gray-400 mt-1">سنسورهای هوشمند IoT</div>
+              <div className="px-2">
+                <span className="text-base sm:text-xl font-black text-emerald-400 font-mono">
+                  {settings.cold_chain_temp || '۰ تا ۲+ °C'}
+                </span>
+                <span className="text-xs text-gray-300 block font-medium mt-0.5">پایش برخط زنجیره سرد</span>
               </div>
 
-              <div className="text-center sm:text-right px-2 sm:px-6 pt-4 sm:pt-0">
-                <div className="text-3xl sm:text-4xl font-black text-amber-400 font-mono tracking-tight">
+              <div className="px-2">
+                <span className="text-base sm:text-xl font-black text-amber-300 font-mono">
                   {settings.satisfaction_rate || '۹۹.۴٪'}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-200 font-bold mt-2">شاخص رضایت کیفی مشتریان</div>
-                <div className="text-[11px] text-gray-400 mt-1">بر اساس ارزیابی ادواری خریداران</div>
+                </span>
+                <span className="text-xs text-gray-300 block font-medium mt-0.5">شاخص رضایت کیفی</span>
               </div>
+
             </div>
           </div>
-        </ScrollReveal>
+        </div>
+
+        {/* 
+          Organic Wave Separator:
+          Seamlessly bridges the dark cinematic hero into the clean white background of the next section!
+        */}
+        <div className="relative w-full overflow-hidden leading-none -mb-[1px]">
+          <svg
+            viewBox="0 0 1440 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="relative block w-full h-6 sm:h-10 lg:h-14 preserve-3d"
+            preserveAspectRatio="none"
+          >
+            {/* Subtle translucent wave layer for depth */}
+            <path
+              d="M0,20 C320,50 560,5 820,32 C1080,60 1280,15 1440,26 L1440,64 L0,64 Z"
+              fill="rgba(255, 255, 255, 0.15)"
+            />
+            {/* Main clean white wave that matches section 2 background */}
+            <path
+              d="M0,32 C340,64 620,12 900,42 C1160,70 1340,24 1440,36 L1440,64 L0,64 Z"
+              fill="#ffffff"
+            />
+          </svg>
+        </div>
 
       </div>
+
     </section>
   );
 }

@@ -122,7 +122,7 @@ export default function MeatCutGuide() {
                 onClick={() => setActiveTab('beef')}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                   activeTab === 'beef'
-                    ? 'bg-[#9f1239] text-white shadow-md'
+                    ? 'bg-[#c21414] text-white shadow-md'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -132,7 +132,7 @@ export default function MeatCutGuide() {
                 onClick={() => setActiveTab('lamb')}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                   activeTab === 'lamb'
-                    ? 'bg-[#9f1239] text-white shadow-md'
+                    ? 'bg-[#c21414] text-white shadow-md'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -142,7 +142,7 @@ export default function MeatCutGuide() {
                 onClick={() => setActiveTab('camel')}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                   activeTab === 'camel'
-                    ? 'bg-[#9f1239] text-white shadow-md'
+                    ? 'bg-[#c21414] text-white shadow-md'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >

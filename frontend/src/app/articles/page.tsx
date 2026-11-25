@@ -44,63 +44,76 @@ export default async function ArticlesPage() {
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+            {articles.map((article, index) => {
               const imageSrc = getSafeImageUrl(article.featured_image, '/images/articles/fresh-meat-guide.jpg');
+              const indexPersian = (index + 1).toLocaleString('fa-IR', { minimumIntegerDigits: 2 });
               return (
                 <Link
                   key={article.id}
                   href={`/articles/${article.slug}`}
-                  className="bg-white rounded-3xl border border-[#e5dfd5] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between group block cursor-pointer"
+                  className="group relative bg-[#fcfbfa] hover:bg-white rounded-[2rem] border border-[#e8e2d8] hover:border-[#c21414] p-5 sm:p-6 shadow-xs hover:shadow-2xl hover:shadow-red-950/10 hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between h-full cursor-pointer overflow-hidden"
                 >
+                  {/* Top Editorial Index & Meta Bar */}
                   <div>
-                    {/* Featured Image */}
-                    <div className="relative h-56 sm:h-60 w-full bg-[#1b1c23] overflow-hidden">
+                    <div className="flex items-center justify-between pb-4 border-b border-[#f0ebe0]">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#c21414]" />
+                        <span className="text-[11px] font-bold text-[#c21414] bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                          {article.category || 'دانشنامه گوشت'}
+                        </span>
+                      </div>
+                      <span className="text-xl sm:text-2xl font-black font-mono text-gray-300 group-hover:text-[#c21414] transition-colors">
+                        {indexPersian}
+                      </span>
+                    </div>
+
+                    {/* Architectural Photo Window */}
+                    <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#181920] my-5 shadow-xs">
                       <Image
                         src={imageSrc}
                         alt={article.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover group-hover:scale-108 transition-transform duration-500"
+                        className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20" />
                       
-                      <div className="absolute top-3.5 right-3.5 bg-black/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-xl border border-white/10">
-                        {article.category}
-                      </div>
-
-                      <div className="absolute bottom-3 right-4 left-4 flex items-center justify-between text-xs text-white/90">
-                        <span className="font-bold flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
-                          {article.author}
+                      {/* Bottom Inset Tag on Image */}
+                      <div className="absolute bottom-3 right-3 left-3 flex items-center justify-between text-[11px] text-white">
+                        <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 font-medium flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                          {article.author || 'واحد کنترل کیفیت'}
                         </span>
-                        <span className="bg-white/20 backdrop-blur-xs px-2.5 py-0.5 rounded-md text-[11px] font-mono">
-                          {article.reading_time}
+                        <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 font-mono text-gray-200">
+                          {article.reading_time || '۴ دقیقه'}
                         </span>
                       </div>
                     </div>
 
-                    {/* Article Content */}
-                    <div className="p-6 space-y-3">
-                      <h2 className="text-base sm:text-lg font-black text-[#111216] group-hover:text-[#9f1239] transition-colors line-clamp-2 leading-snug">
+                    {/* Headline & Abstract */}
+                    <div className="space-y-3">
+                      <h2 className="text-base sm:text-lg font-black text-[#111216] group-hover:text-[#c21414] transition-colors line-clamp-2 leading-snug">
                         {article.title}
                       </h2>
-
-                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-3 leading-relaxed">
+                      <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed">
                         {article.summary}
                       </p>
                     </div>
                   </div>
 
-                  <div className="p-6 pt-0 border-t border-gray-100 mt-2 flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#9f1239] group-hover:text-[#881337] flex items-center gap-1.5 transition-colors">
-                      <span>مطالعه کامل مقاله</span>
-                      <span className="rotate-180 transition-transform group-hover:-translate-x-1">←</span>
+                  {/* Interactive Footer Action */}
+                  <div className="pt-5 mt-4 border-t border-[#f0ebe0] flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#c21414] group-hover:text-[#990f0f] transition-colors">
+                      مطالعه مقاله تخصصی
                     </span>
-                    <span className="text-[11px] text-gray-400">
-                      دانشنامه بی‌سان سام
-                    </span>
+                    <div className="w-8 h-8 rounded-full bg-red-50 text-[#c21414] group-hover:bg-[#c21414] group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-xs group-hover:scale-110">
+                      <span className="rotate-180 text-sm font-black transition-transform group-hover:-translate-x-0.5">←</span>
+                    </div>
                   </div>
+
+                  {/* Subtle Bottom Crimson Accent Line on Hover */}
+                  <div className="absolute bottom-0 inset-x-8 h-1 bg-[#c21414] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full" />
                 </Link>
               );
             })}

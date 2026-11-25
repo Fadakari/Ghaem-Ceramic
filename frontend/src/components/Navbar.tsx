@@ -1,19 +1,22 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCompany } from '@/context/CompanyContext';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const { data } = useCompany();
   const settings = data.settings;
 
-  // Track window scroll for header glassmorphism transition
+  // Track window scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -22,12 +25,15 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lock body scroll and listen for Escape key when mobile menu is open
+  // Lock body scroll for mobile menu or search modal
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (mobileMenuOpen || searchModalOpen) {
       document.body.style.overflow = 'hidden';
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') setMobileMenuOpen(false);
+        if (e.key === 'Escape') {
+          setMobileMenuOpen(false);
+          setSearchModalOpen(false);
+        }
       };
       window.addEventListener('keydown', handleKeyDown);
       return () => {
@@ -37,187 +43,275 @@ export default function Navbar() {
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, searchModalOpen]);
 
-  // Close mobile menu on route change
+  // Close modals on route change
   useEffect(() => {
     setMobileMenuOpen(false);
+    setSearchModalOpen(false);
   }, [pathname]);
 
+  // Persian Jalali date calculation (Intl native)
+  const jalaliDateStr = useMemo(() => {
+    try {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+      return formatter.format(now);
+    } catch {
+      return 'امروز: چهارشنبه ۲۰ آبان ۱۴۰۵';
+    }
+  }, []);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setSearchModalOpen(false);
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
+  // Streamlined 5 core navigation links - Removed redundant #facilities and #guide
   const navLinks = [
     {
       name: 'صفحه اصلی',
       href: '/',
-      sublabel: 'درگاه رسمی مجموعه',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
+      hasChild: false,
     },
     {
       name: 'محصولات پروتئینی',
       href: '/products',
-      sublabel: 'گوساله، گوسفند، شتر و ماکیان',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-      ),
+      hasChild: true,
+      submenu: [
+        { name: 'محصولات تازه (گوساله و گوسفندی)', href: '/products?category=fresh-beef' },
+        { name: 'گوشت شتر ممتاز کویر یزد', href: '/products?category=yazd-camel-meat' },
+        { name: 'فرآورده‌های گوشتی و چرخ‌کرده', href: '/products?category=minced-and-processed' },
+        { name: 'بسته‌بندی گاز محافظ (MAP)', href: '/products?category=map-packaging' },
+      ],
     },
     {
-      name: 'خدمات سازمانی و B2B',
+      name: 'تامین عمده B2B',
       href: '/services',
-      sublabel: 'تامین هورکا و قراردادهای تناژ بالا',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-      ),
+      hasChild: false,
     },
     {
-      name: 'دانشنامه و مقالات',
+      name: 'اخبار و دانستنی‌ها',
       href: '/articles',
-      sublabel: 'راهنمای سلامت، نگهداری و پخت',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-      ),
+      hasChild: false,
     },
     {
-      name: 'درباره ما',
-      href: '/about',
-      sublabel: 'کشتارگاه صنعتی، استانداردها و افتخارات',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'تماس و استعلام',
+      name: 'ارتباط با ما',
       href: '/contact',
-      sublabel: 'دفتر مرکزی، فروش و استعلام قیمت',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-        </svg>
-      ),
+      hasChild: false,
     },
   ];
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
-    return pathname.startsWith(href);
+    const cleanHref = href.split('#')[0].split('?')[0];
+    if (cleanHref === '') return false;
+    return pathname.startsWith(cleanHref);
   };
 
   return (
     <>
-      {/* Sticky Minimalist Header */}
+      {/* 
+        1. Top Utility Header - Ultra-Transparent Dark Glass (.top-header)
+      */}
+      <div className="bg-[#050608]/80 backdrop-blur-xl text-gray-300 text-[11px] py-1.5 px-3 sm:px-4 border-b border-white/5 w-full max-w-full overflow-hidden relative z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 w-full">
+          
+          {/* Right Side: Persian Date & Veterinary Code */}
+          <div className="flex items-center gap-3 truncate">
+            <span className="flex items-center gap-1.5 text-gray-300 font-medium shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="text-white font-semibold">{jalaliDateStr}</span>
+            </span>
+            <span className="text-gray-600 hidden sm:inline">|</span>
+            <span className="text-gray-300 hidden md:inline truncate">
+              پروانه بهداشتی دامپزشکی: <strong className="text-emerald-400 font-mono">{settings.veterinary_code || 'IR-VET-984210'}</strong>
+            </span>
+            <span className="text-gray-600 hidden lg:inline">|</span>
+            <span className="text-rose-200 hidden lg:inline">
+              پایش برودت: <strong className="font-mono text-white">{settings.cold_chain_temp || '۰ تا ۲+ درجه'}</strong>
+            </span>
+          </div>
+
+          {/* Left Side: Sales Phone & Quick Search */}
+          <div className="flex items-center gap-3 shrink-0">
+            <a
+              href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
+              className="flex items-center gap-1.5 text-amber-300 hover:text-white transition-colors font-bold"
+              dir="ltr"
+              title="تماس با واحد فروش"
+            >
+              <span className="font-mono text-xs">{settings.phone_sales || '035-38200001'}</span>
+              <svg className="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </a>
+
+            <span className="text-gray-600">|</span>
+
+            <button
+              type="button"
+              onClick={() => setSearchModalOpen(true)}
+              className="text-gray-300 hover:text-rose-400 hover:bg-white/10 p-1 rounded-lg transition-colors cursor-pointer"
+              title="جستجو در محصولات"
+              aria-label="جستجو"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 
+        2. Main Corporate Header - Ultra-Transparent Dark Glassmorphism, Sticky at Top
+        Zero Left Overflow Guaranteed: max-w-full overflow-x-clip with 5 streamlined links
+      */}
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-50 w-full max-w-full overflow-x-clip transition-all duration-300 ${
           scrolled
-            ? 'bg-[#0c0d10]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-black/40'
-            : 'bg-[#0c0d10]/80 backdrop-blur-md border-b border-white/5'
+            ? 'bg-[#08090b]/85 backdrop-blur-2xl border-b border-white/15 shadow-xl shadow-black/50'
+            : 'bg-[#08090b]/50 backdrop-blur-2xl border-b border-white/10 shadow-lg shadow-black/30'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-18 sm:h-20 gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="flex items-center justify-between h-18 sm:h-20 gap-2 sm:gap-4">
             
-            {/* Brand Logo & Name - Strictly Unshrinkable & Full Company Title */}
-            <Link href="/" className="flex items-center gap-3 shrink-0 group">
-              <div className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-2xl bg-white/5 p-1.5 border border-white/10 group-hover:border-rose-500/40 group-hover:scale-105 transition-all duration-300 shadow-sm">
+            {/* Right: Brand Logo & Typography */}
+            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 shrink-0 group">
+              <div className="relative w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-2xl bg-white/10 p-1.5 border border-white/15 group-hover:border-rose-500 group-hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center">
                 <Image
                   src="/images/brand/logo-mark.png"
                   alt="لوگو شرکت بی‌سان سام یزد"
-                  width={44}
-                  height={44}
+                  width={46}
+                  height={46}
                   className="object-contain w-full h-full"
                   priority
                 />
               </div>
               <div className="flex flex-col shrink-0">
-                <span className="text-base sm:text-lg lg:text-xl font-black tracking-tight text-white group-hover:text-rose-300 transition-colors whitespace-nowrap">
+                <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-rose-400 transition-colors whitespace-nowrap">
                   {settings.company_name || 'شرکت بی‌سان سام یزد'}
                 </span>
-                <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap hidden sm:block">
-                  مجتمع فرآوری و تامین گوشت
+                <span className="text-[10px] text-rose-400 font-extrabold whitespace-nowrap hidden sm:block">
+                  صنایع فرآوری و بسته‌بندی پروتئینی
                 </span>
               </div>
             </Link>
 
-            {/* Desktop Navigation Links - Strictly Single Line */}
-            <nav className="hidden lg:flex items-center gap-1 xl:gap-2 flex-nowrap shrink-0">
+            {/* Center: Desktop Navigation Links (Compact 5 Links - Perfectly Contained) */}
+            <nav className="hidden lg:flex items-center justify-center gap-1.5 xl:gap-3">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
                 return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`relative px-3.5 py-2 rounded-xl text-xs xl:text-sm font-bold whitespace-nowrap transition-all duration-200 shrink-0 ${
-                      active
-                        ? 'text-white bg-white/10 shadow-xs'
-                        : 'text-gray-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <span>{link.name}</span>
-                    {active && (
-                      <span className="absolute bottom-1 right-3 left-3 h-0.5 bg-rose-500 rounded-full" />
+                  <div key={link.name} className="relative group">
+                    <Link
+                      href={link.href}
+                      className={`relative px-3 py-2 rounded-xl text-xs xl:text-sm font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-1 ${
+                        active
+                          ? 'text-white bg-[#c21414] font-black shadow-md shadow-red-950/40'
+                          : 'text-gray-200 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      <span>{link.name}</span>
+                      {link.hasChild && (
+                        <svg className="w-3 h-3 text-gray-400 group-hover:text-white transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      )}
+                    </Link>
+
+                    {/* Submenu Dropdown */}
+                    {link.hasChild && link.submenu && (
+                      <div className="absolute right-0 top-full pt-1.5 hidden group-hover:block z-50 min-w-[220px]">
+                        <div className="bg-[#0e0f13]/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 p-2 space-y-1">
+                          {link.submenu.map((sub) => (
+                            <Link
+                              key={sub.name}
+                              href={sub.href}
+                              className="block px-3.5 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
                     )}
-                  </Link>
+                  </div>
                 );
               })}
             </nav>
 
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-3 shrink-0">
-              <a
-                href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-amber-300 hover:bg-white/5 transition-colors"
-                dir="ltr"
+            {/* Left: Desktop Action Button & Search */}
+            <div className="hidden lg:flex items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setSearchModalOpen(true)}
+                className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10"
+                aria-label="جستجوی سریع"
+                title="جستجو در کاتالوگ"
               >
-                <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <span className="font-mono">{settings.phone_sales}</span>
-              </a>
+              </button>
 
               <Link
                 href="/contact"
-                className="btn-primary-meat px-5 py-2.5 text-xs xl:text-sm font-bold shadow-lg shadow-rose-950/40 whitespace-nowrap"
+                className="btn-primary-meat px-4 py-2.5 text-xs xl:text-sm font-bold shadow-md shadow-red-950/50 whitespace-nowrap flex items-center gap-1.5"
               >
-                <span>استعلام و تامین عمده</span>
-                <svg className="w-4 h-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <span>استعلام و سفارش عمده</span>
+                <svg className="w-3.5 h-3.5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </Link>
             </div>
 
-            {/* Mobile Header Controls: Clean, Balanced & Zero Overflow */}
+            {/* Mobile Header Controls */}
             <div className="flex items-center gap-2 lg:hidden shrink-0">
+              <button
+                type="button"
+                onClick={() => setSearchModalOpen(true)}
+                className="w-9 h-9 flex items-center justify-center text-gray-200 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition-all"
+                aria-label="جستجو"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+
               <a
                 href={`tel:${settings.phone_sales.replace(/[^0-9]/g, '')}`}
-                className="w-10 h-10 flex items-center justify-center text-amber-400 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-800/40 rounded-2xl transition-all"
-                aria-label="تماس با واحد بازرگانی"
-                title="تماس فوری با بازرگانی"
+                className="w-9 h-9 flex items-center justify-center text-amber-300 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition-all"
+                aria-label="تماس با بازرگانی"
+                title="تماس با بازرگانی"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </a>
 
-              {/* Animated Hamburger Button */}
+              {/* Hamburger Button */}
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="flex items-center gap-2 py-2 px-3 text-white bg-rose-950/80 hover:bg-rose-900 border border-rose-800/70 rounded-2xl shadow-md cursor-pointer transition-all active:scale-95"
+                className="flex items-center gap-1.5 py-2 px-2.5 text-white bg-[#c21414] hover:bg-[#990f0f] rounded-xl shadow-xs cursor-pointer transition-all active:scale-95"
                 aria-label="باز کردن منو"
               >
-                <span className="text-xs font-bold text-rose-200">منو</span>
-                <div className="w-4 h-3.5 flex flex-col justify-between">
-                  <span className="w-full h-0.5 bg-rose-200 rounded-full transition-all"></span>
-                  <span className="w-3/4 h-0.5 bg-rose-200 rounded-full transition-all self-end"></span>
-                  <span className="w-full h-0.5 bg-rose-200 rounded-full transition-all"></span>
+                <span className="text-xs font-bold">منو</span>
+                <div className="w-3.5 h-3 flex flex-col justify-between">
+                  <span className="w-full h-0.5 bg-white rounded-full"></span>
+                  <span className="w-2.5 h-0.5 bg-white rounded-full self-end"></span>
+                  <span className="w-full h-0.5 bg-white rounded-full"></span>
                 </div>
               </button>
             </div>
@@ -227,11 +321,90 @@ export default function Navbar() {
       </header>
 
       {/* 
-        BULLETPROOF ANIMATED MOBILE DRAWER
-        Uses inline styles + Tailwind utilities so it is 100% immune to CSS compilation bugs.
+        3. Search Modal
+      */}
+      {searchModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            onClick={() => setSearchModalOpen(false)}
+            className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity"
+          />
+          <div className="relative bg-[#0e0f14] rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-2xl z-10 border border-white/15 text-right space-y-6 text-white">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/10 p-1.5 flex items-center justify-center">
+                  <Image
+                    src="/images/brand/logo-mark.png"
+                    alt="لوگو بی‌سان سام"
+                    width={32}
+                    height={32}
+                    className="object-contain"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-black text-sm text-white">جستجو در سبد محصولات و مقالات</h3>
+                  <p className="text-[11px] text-gray-400">شرکت صنایع گوشت بی‌سان سام یزد</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSearchModalOpen(false)}
+                className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="بستن"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSearchSubmit} className="space-y-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="نام برش گوشت، شقه، راسته، فیله، گوشت شتر..."
+                  autoFocus
+                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/5 border border-white/15 text-sm focus:outline-none focus:border-[#c21414] focus:bg-white/10 text-white transition-all font-medium placeholder-gray-400"
+                />
+                <button
+                  type="submit"
+                  className="absolute left-2.5 top-2.5 bottom-2.5 px-4 bg-[#c21414] hover:bg-[#990f0f] text-white rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <span>جستجو</span>
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Quick Search Suggestions */}
+              <div className="pt-2">
+                <div className="text-[11px] text-gray-400 font-bold mb-2">دسته‌بندی‌های پرجستجو:</div>
+                <div className="flex flex-wrap gap-2">
+                  {['فیله گوساله', 'راسته گوسفندی', 'گوشت شتر یزد', 'چرخ‌کرده MAP', 'شقه بره', 'ماهیچه'].map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery(tag);
+                        router.push(`/products?search=${encodeURIComponent(tag)}`);
+                        setSearchModalOpen(false);
+                      }}
+                      className="px-3 py-1 rounded-xl bg-white/10 hover:bg-[#c21414] text-xs font-medium text-gray-300 hover:text-white transition-colors"
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 
+        4. Mobile Drawer Menu
       */}
       <div className="lg:hidden">
-        {/* Backdrop Overlay with Smooth Fade Transition */}
         <div
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden={!mobileMenuOpen}
@@ -239,7 +412,7 @@ export default function Navbar() {
             position: 'fixed',
             inset: 0,
             zIndex: 60,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
             opacity: mobileMenuOpen ? 1 : 0,
@@ -249,7 +422,6 @@ export default function Navbar() {
           }}
         />
 
-        {/* Drawer Panel with Hardware-Accelerated Slide Transition */}
         <aside
           role="dialog"
           aria-modal="true"
@@ -260,11 +432,11 @@ export default function Navbar() {
             bottom: 0,
             right: 0,
             width: '85vw',
-            maxWidth: '380px',
+            maxWidth: '360px',
             zIndex: 61,
-            backgroundColor: '#0f1013',
+            backgroundColor: '#0a0b0e',
             borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '-15px 0 50px rgba(0, 0, 0, 0.8)',
+            boxShadow: '-15px 0 50px rgba(0, 0, 0, 0.9)',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -276,10 +448,8 @@ export default function Navbar() {
             willChange: 'transform',
           }}
         >
-          {/* Drawer Top Section */}
           <div>
-            {/* Header with Logo and prominent Close Button */}
-            <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-[#08090b]">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#050608]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-white/5 p-1.5 border border-white/10 flex items-center justify-center shrink-0">
                   <Image
@@ -296,66 +466,54 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Close Button - Guaranteed Smooth Close */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-10 h-10 rounded-2xl bg-white/10 hover:bg-rose-900/60 border border-white/10 hover:border-rose-700/60 text-gray-300 hover:text-white flex items-center justify-center cursor-pointer transition-all active:scale-90"
+                className="w-9 h-9 rounded-xl bg-white/10 hover:bg-rose-900/60 border border-white/10 text-gray-300 hover:text-white flex items-center justify-center cursor-pointer transition-all active:scale-90"
                 aria-label="بستن منو"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                ✕
               </button>
             </div>
 
-            {/* Quick Search Shortcut inside Drawer */}
             <div className="p-4 pb-2">
-              <Link
-                href="/products"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 px-3.5 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setSearchModalOpen(true);
+                }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <svg className="w-4 h-4 text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span>جستجو در کاتالوگ و برش‌های گوشت...</span>
-              </Link>
+              </button>
             </div>
 
-            {/* Navigation Links with Icons & Sublabels */}
-            <div className="p-4 space-y-2">
+            <div className="p-4 space-y-1.5">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
                 return (
                   <Link
-                    key={link.href}
+                    key={link.name}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3.5 p-3.5 rounded-2xl transition-all duration-200 ${
+                    className={`flex items-center justify-between p-3.5 rounded-2xl transition-all duration-200 ${
                       active
-                        ? 'bg-rose-950/80 text-rose-300 border border-rose-800/60 shadow-sm'
+                        ? 'bg-[#c21414] text-white font-bold shadow-sm'
                         : 'text-gray-300 hover:bg-white/5 hover:text-white'
                     }`}
                   >
-                    <div className={`p-2 rounded-xl shrink-0 ${active ? 'bg-rose-900/60 text-rose-300' : 'bg-white/5 text-gray-400'}`}>
-                      {link.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-sm leading-tight truncate">{link.name}</div>
-                      <div className="text-[10px] text-gray-400 font-normal mt-0.5 truncate">{link.sublabel}</div>
-                    </div>
-                    <svg className="w-4 h-4 text-gray-500 rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <span className="text-sm font-bold">{link.name}</span>
+                    <span className="rotate-180 text-xs opacity-60">←</span>
                   </Link>
                 );
               })}
             </div>
           </div>
 
-          {/* Drawer Bottom Section */}
-          <div className="p-4 border-t border-white/10 bg-[#08090b] space-y-3">
+          <div className="p-4 border-t border-white/10 bg-[#050608] space-y-3">
             <Link
               href="/contact"
               onClick={() => setMobileMenuOpen(false)}
@@ -364,8 +522,7 @@ export default function Navbar() {
               استعلام قیمت و تامین عمده B2B
             </Link>
 
-            {/* Quick Contact & Info Card */}
-            <div className="bg-white/5 p-3.5 rounded-2xl border border-white/5 space-y-2 text-xs">
+            <div className="bg-white/5 p-3 rounded-2xl border border-white/5 space-y-2 text-xs">
               <div className="flex items-center justify-between text-gray-400">
                 <span>تلفن بازرگانی:</span>
                 <a
@@ -379,10 +536,6 @@ export default function Navbar() {
               <div className="flex items-center justify-between text-gray-400 pt-1.5 border-t border-white/5">
                 <span>کد پروانه بهداشتی:</span>
                 <span className="text-emerald-400 font-mono font-bold">{settings.veterinary_code}</span>
-              </div>
-              <div className="flex items-center justify-between text-gray-400 pt-1.5 border-t border-white/5">
-                <span>پایش برودت زنجیره سرد:</span>
-                <span className="text-sky-300 font-mono font-bold">{settings.cold_chain_temp}</span>
               </div>
             </div>
           </div>

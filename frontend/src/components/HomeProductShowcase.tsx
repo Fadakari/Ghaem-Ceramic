@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCompany } from '@/context/CompanyContext';
-import { Product } from '@/types/company';
 import { getSafeImageUrl } from '@/lib/imageHelper';
 import ScrollReveal from '@/components/ScrollReveal';
 
@@ -26,65 +25,57 @@ export default function HomeProductShowcase() {
   ];
 
   return (
-    <section className="py-20 sm:py-28 bg-[#faf8f5] text-[#1f2937] relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 sm:py-36 bg-[#faf8f5] text-[#1f2937] relative overflow-hidden">
+      
+      {/* Subtle organic ambient circles in the background */}
+      <div className="absolute top-1/4 -right-40 w-96 h-96 bg-red-100/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 -left-40 w-96 h-96 bg-amber-100/30 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header - Clean, Editorial & Spacious */}
+        {/* Section Header - High Breathing Whitespace & Minimal Luxury */}
         <ScrollReveal direction="up">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 border-b border-[#e5dfd5]/80 pb-6 gap-4">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="w-8 h-0.5 bg-[#9f1239] rounded-full"></span>
-                <span className="text-xs font-bold text-[#9f1239] tracking-wider uppercase">
-                  کاتالوگ تخصصی فرآورده‌های پروتئینی
-                </span>
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-[#111216] tracking-tight">
-                برش‌های برگزیده و سبد محصولات ممتاز
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-500 max-w-2xl leading-relaxed">
-                عرضه مستقیم لاشه، شقه و قطعه‌بندی بهداشتی در اتمسفر اصلاح‌شده (MAP) با پایش پیوسته زنجیره سرمایش.
-              </p>
+          <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-24 space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c21414]/10 text-[#c21414] text-xs font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c21414]" />
+              <span>سبد جامع فرآورده‌های پروتئینی</span>
             </div>
 
-            <div className="shrink-0">
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#9f1239] hover:text-[#881337] transition-colors bg-white px-5 py-3 rounded-2xl border border-[#e5dfd5] shadow-xs group"
-              >
-                <span>مشاهده کل کاتالوگ ({products.length})</span>
-                <svg className="w-4 h-4 rotate-180 group-hover:-translate-x-1.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#111216] tracking-tight leading-tight">
+              همه محصولات بی‌سان سام یزد
+            </h2>
+
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-2xl mx-auto">
+              صنایع گوشت بی‌سان سام یزد با بهره‌گیری از فناوری‌های نوین و نظارت دقیق دامپزشکی، مجموعه‌ای کامل از انواع گوشت گرم گوساله، گوسفندی، گوشت شتر اصیل کویر یزد و بسته‌بندی‌های اتمسفر اصلاح‌شده (MAP) را با حفظ بافت طبیعی و سلامت تضمین‌شده عرضه می‌نماید.
+            </p>
+
+            {/* Filter Pills with Generous Air */}
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
+              {filterTabs.map((tab) => {
+                const active = selectedAnimal === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    onClick={() => setSelectedAnimal(tab.key)}
+                    className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer ${
+                      active
+                        ? 'bg-[#c21414] text-white shadow-lg shadow-red-950/25 scale-105'
+                        : 'bg-white text-gray-700 hover:text-[#c21414] border border-gray-200/80 hover:border-[#c21414]/40 hover:bg-gray-50'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </ScrollReveal>
 
-        {/* Minimalist Filter Pills */}
-        <ScrollReveal direction="up" delay={100}>
-          <div className="flex flex-wrap items-center gap-2.5 mb-10">
-            {filterTabs.map((tab) => {
-              const active = selectedAnimal === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setSelectedAnimal(tab.key)}
-                  className={`px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                    active
-                      ? 'bg-[#9f1239] text-white shadow-md shadow-rose-950/20'
-                      : 'bg-white text-gray-600 border border-[#e5dfd5] hover:bg-[#f3ede3]'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </ScrollReveal>
-
-        {/* Product Cards Grid - Luxury Minimalist with Scroll Stagger */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+        {/* 
+          A Completely Distinctive, Non-Standard Product Showcase:
+          Circular / Organic Floating Portals with Generous Whitespace
+        */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 lg:gap-20">
           {filteredProducts.map((product, index) => {
             const imageSrc = getSafeImageUrl(product.image);
             return (
@@ -93,100 +84,107 @@ export default function HomeProductShowcase() {
                 direction="up"
                 delay={(index % 3) * 120}
               >
-                <div className="card-luxury flex flex-col justify-between overflow-hidden group h-full">
-                  <div>
-                    {/* Photo & Clickable Anchor to Product Detail Page */}
-                    <Link href={`/products/${product.slug}`} className="block relative h-64 sm:h-72 w-full bg-[#1b1c23] overflow-hidden">
+                <div className="group flex flex-col items-center text-center space-y-6">
+                  
+                  {/* 
+                    Circular Floating Artwork Frame
+                    Instead of a box, it's a dramatic floating circle with concentric rings & soft shadow
+                  */}
+                  <Link
+                    href={`/products/${product.slug}`}
+                    className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-full p-2.5 bg-white border border-[#e5dfd5] group-hover:border-[#c21414] shadow-md group-hover:shadow-2xl group-hover:shadow-red-950/15 group-hover:scale-105 transition-all duration-500 block overflow-hidden cursor-pointer"
+                  >
+                    {/* Inner Clipped Circle */}
+                    <div className="relative w-full h-full rounded-full overflow-hidden bg-[#1a1b20]">
                       <Image
                         src={imageSrc}
                         alt={product.name}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
+                        className="object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
-
-                      {/* Subtle Gradient Vignette */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-
-                      {/* Top Badges Bar - NEVER COLLIDES */}
-                      <div className="absolute top-4 right-4 left-4 flex items-center justify-between pointer-events-none z-10">
-                        <span className="badge-fresh shadow-md">
-                          {product.animal_type_display || product.animal_type}
-                        </span>
-                        <span className="badge-cold shadow-md">
-                          {product.temperature_state === 'chilled' ? 'گرم تازه ۰-۲°C' : 'منجمد IQF'}
-                        </span>
-                      </div>
-
-                      {/* Cut Type Banner on Bottom of Photo */}
-                      <div className="absolute bottom-3.5 right-4 left-4 text-white">
-                        <div className="text-[11px] text-rose-300 font-medium">{product.cut_type}</div>
-                        <div className="text-base sm:text-lg font-black truncate group-hover:text-rose-200 transition-colors">
-                          {product.name}
-                        </div>
-                      </div>
-                    </Link>
-
-                    {/* Body Content - Spacious & Clean */}
-                    <div className="p-6 space-y-4">
-                      {/* Suitable for & Shelf life */}
-                      <div className="space-y-1.5 text-xs text-gray-600">
-                        <div className="flex items-start gap-1.5">
-                          <span className="font-bold text-gray-900 shrink-0">کاربرد در طبخ:</span>
-                          <span className="text-gray-700 truncate">{product.suitable_for}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-gray-900 shrink-0">ماندگاری بهداشتی:</span>
-                          <span className="text-gray-700">{product.shelf_life}</span>
-                        </div>
-                      </div>
-
-                      {/* Minimalist Marbling Gauge & Packaging Badge */}
-                      <div className="flex items-center justify-between pt-2.5 border-t border-[#f0ebe0] text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] font-bold text-gray-500">ماربلینگ:</span>
-                          <div className="flex items-center gap-1">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <span
-                                key={star}
-                                className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                                  star <= product.marbling_score
-                                    ? 'bg-[#9f1239]'
-                                    : 'bg-gray-200'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </div>
-
-                        <span className="badge-pill-subtle">
-                          {product.packaging_type_display || 'بسته‌بندی MAP'}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                      
+                      {/* Floating Temperature Badge on Bottom of Circle */}
+                      <div className="absolute bottom-3 inset-x-0 flex justify-center">
+                        <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/20 shadow-sm">
+                          {product.temperature_state === 'chilled' ? 'گرم تازه ۰ تا ۲+ °C' : 'منجمد IQF'}
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </Link>
 
-                  {/* Footer Buttons - Luxury Balance */}
-                  <div className="px-6 pb-6 pt-1 flex items-center gap-2.5 border-t border-[#f0ebe0]/70">
+                  {/* Clean Typography & Minimalist Details */}
+                  <div className="space-y-3 max-w-xs mx-auto">
+                    
+                    {/* Animal Type & Cut Pill */}
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-[11px] font-bold text-[#c21414] bg-red-50 px-3 py-0.5 rounded-full border border-red-100">
+                        {product.animal_type_display || product.animal_type}
+                      </span>
+                      <span className="text-[11px] text-gray-500 font-medium">
+                        {product.cut_type}
+                      </span>
+                    </div>
+
+                    {/* Product Name */}
                     <Link
                       href={`/products/${product.slug}`}
-                      className="flex-1 py-3 px-3 rounded-xl bg-[#17181d] hover:bg-[#252730] text-white text-xs font-bold text-center transition-colors"
+                      className="block text-lg sm:text-xl font-black text-[#111216] group-hover:text-[#c21414] transition-colors leading-snug"
                     >
-                      مشاهده آنالیز و پخت
+                      {product.name}
                     </Link>
 
-                    <Link
-                      href={`/contact?subject=${encodeURIComponent(product.name)}`}
-                      className="py-3 px-4 rounded-xl bg-[#9f1239] hover:bg-[#881337] text-white text-xs font-bold text-center transition-colors shadow-sm"
-                      title="استعلام سفارش عمده"
-                    >
-                      استعلام تناژ
-                    </Link>
+                    {/* Culinary Usage */}
+                    <p className="text-xs text-gray-600 line-clamp-1 leading-relaxed">
+                      {product.suitable_for ? `مناسب برای: ${product.suitable_for}` : 'تامین با بهترین استاندارد برش'}
+                    </p>
+
+                    {/* Marbling Dots Indicator */}
+                    <div className="flex items-center justify-center gap-1.5 pt-1 text-xs text-gray-500">
+                      <span className="text-[11px]">ماربلینگ:</span>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                            key={star}
+                            className={`w-2 h-2 rounded-full ${
+                              star <= (product.marbling_score || 3)
+                                ? 'bg-[#c21414]'
+                                : 'bg-gray-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Sleek Minimalist Action Pill */}
+                    <div className="pt-2">
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold text-gray-700 group-hover:text-white bg-gray-100 group-hover:bg-[#c21414] transition-all duration-300 shadow-2xs group-hover:shadow-md"
+                      >
+                        <span>مشاهده مشخصات و برش</span>
+                        <span className="rotate-180 transition-transform group-hover:-translate-x-1">←</span>
+                      </Link>
+                    </div>
+
                   </div>
+
                 </div>
               </ScrollReveal>
             );
           })}
+        </div>
+
+        {/* Bottom Wide CTA to Complete Catalog */}
+        <div className="text-center mt-20 sm:mt-28">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full border border-gray-300 hover:border-[#c21414] bg-white hover:bg-[#c21414] text-gray-800 hover:text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-lg transition-all duration-300"
+          >
+            <span>مشاهده تمامی محصولات و کاتالوگ جامع ({products.length} قلم)</span>
+            <span className="rotate-180">←</span>
+          </Link>
         </div>
 
       </div>

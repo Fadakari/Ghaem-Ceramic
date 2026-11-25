@@ -9,9 +9,6 @@ export async function getCompanyBundle(): Promise<CompanyBundle> {
       cache: 'no-store',
       headers: {
         'Accept': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
       },
     });
 

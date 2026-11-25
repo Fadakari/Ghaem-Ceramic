@@ -8,6 +8,9 @@ export interface CompanySetting {
   hero_subtitle: string;
   hero_badge: string;
   hero_image: string;
+  hero_image_2?: string;
+  hero_image_3?: string;
+  hero_images?: string[];
   phone_primary: string;
   phone_sales: string;
   phone_emergency: string;
@@ -22,14 +25,18 @@ export interface CompanySetting {
   about_vision: string;
   about_image: string;
   facility_image: string;
+  wholesale_title?: string;
+  wholesale_subtitle?: string;
 }
 
 export interface ProductCategory {
   id: number;
   name: string;
   slug: string;
+  subtitle?: string;
   description: string;
   icon: string;
+  image?: string;
   order: number;
   products_count?: number;
 }
@@ -123,6 +130,21 @@ export interface ContactInquiry {
   created_at?: string;
 }
 
+export interface Facility {
+  id: number;
+  key_slug: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  image: string;
+  description: string;
+  features: string;
+  features_list: string[];
+  capacity: string;
+  order: number;
+  is_active: boolean;
+}
+
 export interface CompanyBundle {
   settings: CompanySetting;
   categories: ProductCategory[];
@@ -130,6 +152,7 @@ export interface CompanyBundle {
   products: Product[];
   services: Service[];
   standards: QualityStandard[];
+  facilities?: Facility[];
   articles: Article[];
   faqs: FAQ[];
 }

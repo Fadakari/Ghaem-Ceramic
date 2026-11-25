@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Hero from '@/components/Hero';
+import FactoryShowcase from '@/components/FactoryShowcase';
 import HomeProductShowcase from '@/components/HomeProductShowcase';
 import MeatCutGuide from '@/components/MeatCutGuide';
 import ScrollReveal from '@/components/ScrollReveal';
@@ -31,41 +32,140 @@ export default async function HomePage() {
   const categories = data.categories || [];
   const articles = data.articles?.slice(0, 3) || [];
 
+  const defaultCategoryIcons: Record<string, string> = {
+    'fresh-beef': '/images/cat-fresh.png',
+    'minced-and-processed': '/images/cat-processed.png',
+    'frozen-cuts': '/images/cat-frozen.png',
+    'poultry-cuts': '/images/cat-sokhari.png',
+    'horeca-bulk': '/images/cat-wholesale.png',
+    'yazd-camel-meat': '/images/cat-sokhari.png',
+  };
+
+  const displayCategories = categories.length >= 3
+    ? categories.slice(0, 5).map((cat) => ({
+        slug: cat.slug,
+        name: cat.name,
+        subtitle: cat.subtitle || cat.description || 'تامین مستقیم با نظارت مقیم دامپزشکی',
+        image: getSafeImageUrl(cat.image, defaultCategoryIcons[cat.slug] || '/images/cat-fresh.png'),
+        href: cat.slug === 'horeca-bulk' ? '/services' : `/products?category=${cat.slug}`,
+        btnText: cat.slug === 'horeca-bulk' ? 'خدمات سازمانی' : 'مشاهده محصولات',
+      }))
+    : [
+        {
+          slug: 'fresh-beef',
+          name: 'محصولات تازه',
+          subtitle: 'گوشت گرم گوساله و گوسفندی کشتار روز',
+          image: '/images/cat-fresh.png',
+          href: '/products?category=fresh-beef',
+          btnText: 'مشاهده محصولات',
+        },
+        {
+          slug: 'minced-and-processed',
+          name: 'چرخ‌کرده و قطعه‌بندی',
+          subtitle: 'چرخ‌کرده خالص، استیک، راسته و فیله',
+          image: '/images/cat-processed.png',
+          href: '/products?category=minced-and-processed',
+          btnText: 'مشاهده محصولات',
+        },
+        {
+          slug: 'yazd-camel-meat',
+          name: 'گوشت شتر کویر یزد',
+          subtitle: 'کم‌چرب، گرم‌مزاج و سرشار از آهن طبیعی',
+          image: '/images/cat-sokhari.png',
+          href: '/products?category=yazd-camel-meat',
+          btnText: 'مشاهده محصولات',
+        },
+        {
+          slug: 'frozen-cuts',
+          name: 'فرآورده‌های منجمد',
+          subtitle: 'بسته‌بندی اتمسفر محافظ و انجماد IQF',
+          image: '/images/cat-frozen.png',
+          href: '/products?category=frozen-cuts',
+          btnText: 'مشاهده محصولات',
+        },
+        {
+          slug: 'horeca-bulk',
+          name: 'محصولات عمده',
+          subtitle: 'تأمین هتل‌ها، هایپرمارکت‌ها و ارگان‌ها',
+          image: '/images/cat-wholesale.png',
+          href: '/services',
+          btnText: 'خدمات سازمانی',
+        },
+      ];
+
   return (
     <div className="min-h-screen bg-[#faf8f5] text-[#1f2937]">
-      {/* 1. Hero Section - Cinematic Luxury with Scroll Stagger */}
+      {/* 1. Hero Section - Cinematic Luxury with Mahya Red Accents */}
       <Hero />
 
-      {/* 2. Refined Category Navigation Bar - Clean, Minimalist & Spacious */}
-      <section className="py-12 bg-white border-b border-[#e5dfd5]/80">
+      {/* 2. Signature Quick Category Grid - Exact Mahya Protein Under-Slider Style */}
+      <section className="py-12 sm:py-16 bg-white border-b border-[#ede7dd] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
               <div>
-                <span className="text-xs font-bold text-[#9f1239] uppercase tracking-wider">
-                  سبد جامع فرآورده‌های پروتئینی
+                <span className="text-xs font-bold text-[#c21414] uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#c21414]"></span>
+                  دسته‌بندی‌های اصلی فرآورده‌های پروتئینی
                 </span>
-                <h3 className="text-lg sm:text-xl font-black text-[#111216] mt-0.5">
-                  دسته‌بندی مستقیم بر اساس نوع دام
+                <h3 className="text-xl sm:text-2xl font-black text-[#111216] mt-1">
+                  تامین مستقیم بر اساس نوع دام و شیوه فرآوری
                 </h3>
               </div>
               <Link
                 href="/products"
-                className="text-xs font-bold text-gray-500 hover:text-[#9f1239] transition-colors"
+                className="text-xs sm:text-sm font-bold text-[#c21414] hover:text-[#990f0f] transition-colors flex items-center gap-1"
               >
-                نمایش تمام محصولات و قطعات ←
+                <span>مشاهده کاتالوگ جامع محصولات</span>
+                <span className="rotate-180">←</span>
               </Link>
             </div>
 
-            {/* Minimalist Pills */}
-            <div className="flex flex-wrap items-center gap-3">
+            {/* 5 Prominent Mahya-Style Category Round Cards - Dynamically Connected to Backend */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+              {displayCategories.map((cat, idx) => (
+                <Link
+                  key={`${cat.slug}-${idx}`}
+                  href={cat.href}
+                  className={`group p-5 rounded-2xl bg-[#fcfbfa] hover:bg-white border border-[#ede7dd] hover:border-[#c21414] shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center text-center justify-between ${
+                    idx === 4 ? 'col-span-2 sm:col-span-1' : ''
+                  }`}
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white border-2 border-gray-100 group-hover:border-[#c21414] flex items-center justify-center p-3 shadow-xs group-hover:shadow-md group-hover:scale-105 transition-all duration-300 mb-3 overflow-hidden">
+                      <Image
+                        src={cat.image}
+                        alt={cat.name}
+                        width={70}
+                        height={70}
+                        className="object-contain"
+                      />
+                    </div>
+                    <h4 className="font-black text-sm text-[#111216] group-hover:text-[#c21414] transition-colors">
+                      {cat.name}
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-1 leading-relaxed line-clamp-2">
+                      {cat.subtitle}
+                    </p>
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-gray-100 w-full flex items-center justify-center gap-1 text-[11px] text-[#c21414] font-bold">
+                    <span>{cat.btnText}</span>
+                    <span className="rotate-180 group-hover:-translate-x-1 transition-transform">←</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Quick Pills */}
+            <div className="flex flex-wrap items-center gap-2.5 pt-2">
+              <span className="text-xs font-bold text-gray-400 pl-1">دسترسی سریع به دسته‌ها:</span>
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
                   href={`/products?category=${cat.slug}`}
-                  className="px-5 py-3 rounded-2xl border border-[#e5dfd5] bg-[#faf8f5] hover:bg-white hover:border-[#9f1239] hover:text-[#9f1239] text-xs sm:text-sm font-bold text-gray-700 transition-all duration-200 shadow-xs hover:shadow-md flex items-center gap-2 group"
+                  className="px-4 py-2 rounded-xl border border-[#ede7dd] bg-[#fcfbfa] hover:bg-white hover:border-[#c21414] hover:text-[#c21414] text-xs font-bold text-gray-700 transition-all duration-200 shadow-2xs flex items-center gap-2 group"
                 >
-                  <span className="w-2 h-2 rounded-full bg-gray-300 group-hover:bg-[#9f1239] transition-colors"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-[#c21414] transition-colors"></span>
                   <span>{cat.name}</span>
                 </Link>
               ))}
@@ -74,21 +174,27 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3. Master Product Showcase with Clickable Cards & Scroll Reveal */}
+      {/* 
+        3. Factory & Processing Facilities Showcase - Dedicated Mahya-Style Section (.main-projects)
+        Explicitly requested by the user: "پایین بخش هیرو مثل مهیا بخش هایی برای عکس های کارخانه و... داشته باشه"
+      */}
+      <FactoryShowcase />
+
+      {/* 4. Master Product Showcase with Clickable Cards ("همه محصولات بی‌سان سام") */}
       <HomeProductShowcase />
 
-      {/* 4. Interactive Butcher Cut Anatomy Guide */}
+      {/* 5. Interactive Butcher Cut Anatomy Guide */}
       <MeatCutGuide />
 
-      {/* 5. Enterprise B2B Supply & HoReCa Spotlight - Minimalist & Authoritative */}
-      <section className="py-20 sm:py-32 bg-[#0c0d10] text-white border-b border-white/5">
+      {/* 6. Enterprise B2B Supply & HoReCa Spotlight - Minimalist & Authoritative */}
+      <section className="py-20 sm:py-32 bg-[#0c0d10] text-white border-b border-white/5 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
             <div className="lg:col-span-7 space-y-7 text-right">
               <ScrollReveal direction="up">
                 <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-xs font-bold text-rose-300">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-[#c21414] animate-pulse"></span>
                   <span>تامین زنجیره‌ای HoReCa و صنایع بزرگ</span>
                 </div>
               </ScrollReveal>
@@ -146,7 +252,7 @@ export default async function HomePage() {
             </div>
 
             <div className="lg:col-span-5">
-              <ScrollReveal direction="left" delay={250}>
+              <ScrollReveal direction="up" delay={250}>
                 <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl h-80 sm:h-96 w-full group">
                   <Image
                     src={getSafeImageUrl(settings.facility_image, '/images/facilities/cold-chain-facility.jpg')}
@@ -168,12 +274,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 6. Health & Quality Assurance Pillars - Spacious Editorial Layout */}
+      {/* 7. Health & Quality Assurance Pillars */}
       <section className="py-20 sm:py-32 bg-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up">
             <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-              <span className="text-xs font-bold text-[#9f1239] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#c21414] uppercase tracking-wider">
                 چرا بی‌سان سام یزد؟
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-[#111216] mt-2">
@@ -185,7 +291,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <ScrollReveal direction="up" delay={100}>
               <div className="bg-white p-7 rounded-3xl border border-[#e5dfd5] shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 space-y-4 h-full">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#9f1239] flex items-center justify-center font-black text-lg">
+                <div className="w-12 h-12 rounded-2xl bg-red-50 text-[#c21414] flex items-center justify-center font-black text-lg">
                   ۰۱
                 </div>
                 <h3 className="text-base font-bold text-[#111216]">نظارت مقیم دامپزشکی</h3>
@@ -234,22 +340,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 7. Editorial Knowledge Base Preview */}
+      {/* 8. Editorial Knowledge Base Preview (Like Mahya News & Articles) */}
       <section className="py-20 sm:py-28 bg-white border-t border-[#e2dcd2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
               <div>
-                <span className="text-xs font-bold text-[#9f1239] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#c21414] uppercase tracking-wider">
                   دانشنامه و راهنمای سلامت گوشت
                 </span>
                 <h2 className="text-2xl sm:text-4xl font-black text-[#111216] mt-1.5">
-                  تازه‌ترین مقالات تخصصی و آموزشی
+                  تازه‌ترین مقالات تخصصی و اخبار صنعت
                 </h2>
               </div>
               <Link
                 href="/articles"
-                className="mt-4 sm:mt-0 text-xs sm:text-sm font-bold text-[#9f1239] hover:underline"
+                className="mt-4 sm:mt-0 text-xs sm:text-sm font-bold text-[#c21414] hover:underline"
               >
                 مشاهده تمامی مقالات دانشنامه ←
               </Link>
@@ -259,6 +365,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             {articles.map((article, index) => {
               const imageSrc = getSafeImageUrl(article.featured_image, '/images/articles/fresh-meat-guide.jpg');
+              const indexPersian = (index + 1).toLocaleString('fa-IR', { minimumIntegerDigits: 2 });
               return (
                 <ScrollReveal
                   key={article.id}
@@ -267,41 +374,68 @@ export default async function HomePage() {
                 >
                   <Link
                     href={`/articles/${article.slug}`}
-                    className="card-luxury overflow-hidden flex flex-col justify-between group block cursor-pointer h-full"
+                    className="group relative bg-[#fcfbfa] hover:bg-white rounded-[2rem] border border-[#e8e2d8] hover:border-[#c21414] p-5 sm:p-6 shadow-xs hover:shadow-2xl hover:shadow-red-950/10 hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between h-full cursor-pointer overflow-hidden"
                   >
+                    {/* Top Editorial Index & Meta Bar */}
                     <div>
-                      <div className="relative h-52 sm:h-56 w-full bg-[#1b1c23] overflow-hidden">
+                      <div className="flex items-center justify-between pb-4 border-b border-[#f0ebe0]">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#c21414]" />
+                          <span className="text-[11px] font-bold text-[#c21414] bg-red-50 px-3 py-1 rounded-full border border-red-100">
+                            {article.category || 'دانشنامه گوشت'}
+                          </span>
+                        </div>
+                        <span className="text-xl sm:text-2xl font-black font-mono text-gray-300 group-hover:text-[#c21414] transition-colors">
+                          {indexPersian}
+                        </span>
+                      </div>
+
+                      {/* Architectural Photo Window */}
+                      <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#181920] my-5 shadow-xs">
                         <Image
                           src={imageSrc}
                           alt={article.title}
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
-                          className="object-cover group-hover:scale-106 transition-transform duration-700 ease-out"
+                          className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                        <div className="absolute top-4 right-4 bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-xl border border-white/10">
-                          {article.category}
-                        </div>
-                        <div className="absolute bottom-3 right-4 left-4 text-white text-[11px] flex items-center justify-between">
-                          <span>{article.author}</span>
-                          <span className="bg-white/20 backdrop-blur-xs px-2 py-0.5 rounded font-mono">{article.reading_time}</span>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20" />
+                        
+                        {/* Bottom Inset Tag on Image */}
+                        <div className="absolute bottom-3 right-3 left-3 flex items-center justify-between text-[11px] text-white">
+                          <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 font-medium flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            {article.author || 'واحد کنترل کیفیت'}
+                          </span>
+                          <span className="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 font-mono text-gray-200">
+                            {article.reading_time || '۴ دقیقه'}
+                          </span>
                         </div>
                       </div>
 
-                      <div className="p-6 space-y-2.5">
-                        <h3 className="text-base font-bold text-[#111216] group-hover:text-[#9f1239] transition-colors line-clamp-2 leading-snug">
+                      {/* Headline & Abstract */}
+                      <div className="space-y-3">
+                        <h3 className="text-base sm:text-lg font-black text-[#111216] group-hover:text-[#c21414] transition-colors line-clamp-2 leading-snug">
                           {article.title}
                         </h3>
-                        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
                           {article.summary}
                         </p>
                       </div>
                     </div>
 
-                    <div className="p-6 pt-0 text-xs font-bold text-[#9f1239] flex items-center gap-1.5 group-hover:text-[#881337]">
-                      <span>مطالعه کامل مقاله</span>
-                      <span className="rotate-180 transition-transform group-hover:-translate-x-1.5">←</span>
+                    {/* Interactive Footer Action */}
+                    <div className="pt-5 mt-4 border-t border-[#f0ebe0] flex items-center justify-between">
+                      <span className="text-xs font-bold text-[#c21414] group-hover:text-[#990f0f] transition-colors">
+                        مطالعه مقاله تخصصی
+                      </span>
+                      <div className="w-8 h-8 rounded-full bg-red-50 text-[#c21414] group-hover:bg-[#c21414] group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-xs group-hover:scale-110">
+                        <span className="rotate-180 text-sm font-black transition-transform group-hover:-translate-x-0.5">←</span>
+                      </div>
                     </div>
+
+                    {/* Subtle Bottom Crimson Accent Line on Hover */}
+                    <div className="absolute bottom-0 inset-x-8 h-1 bg-[#c21414] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full" />
                   </Link>
                 </ScrollReveal>
               );
@@ -310,19 +444,19 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 8. Direct Wholesale Inquiry Banner - Luxury Dark Aesthetic */}
+      {/* 9. Direct Wholesale Inquiry Banner - Luxury Dark Aesthetic */}
       <section className="py-16 sm:py-20 bg-[#0a0b0e] text-white border-t border-white/10 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-rose-950/20 via-transparent to-rose-950/20 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-7 relative z-10">
           <ScrollReveal direction="up">
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
-              نیاز به تامین عمده پروتئین یا عقد قرارداد سازمانی دارید؟
+              {settings.wholesale_title || 'نیاز به تامین عمده پروتئین یا عقد قرارداد سازمانی دارید؟'}
             </h2>
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={100}>
             <p className="text-xs sm:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              کارشناسان بازرگانی بی‌سان سام یزد آماده پاسخگویی به استعلام تناژ، ارسال نمونه و تدوین قراردادهای بلندمدت با نرخ رسمی هستند.
+              {settings.wholesale_subtitle || 'کارشناسان بازرگانی بی‌سان سام یزد آماده پاسخگویی به استعلام تناژ، ارسال نمونه و تدوین قراردادهای بلندمدت با نرخ رسمی هستند.'}
             </p>
           </ScrollReveal>
 

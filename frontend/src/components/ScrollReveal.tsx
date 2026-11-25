@@ -33,8 +33,8 @@ export default function ScrollReveal({
         });
       },
       {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.08,
+        rootMargin: '0px 0px -20px 0px',
       }
     );
 
@@ -52,15 +52,24 @@ export default function ScrollReveal({
 
   const getTransform = () => {
     if (isVisible) return 'translate3d(0, 0, 0)';
+    
+    // Check if window is mobile or small screen
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+
+    // On mobile, NEVER translate horizontally to prevent any viewport overflow or horizontal scroll bugs
+    if (isMobile) {
+      return 'translate3d(0, 24px, 0)';
+    }
+
     switch (direction) {
       case 'up':
         return 'translate3d(0, 32px, 0)';
       case 'down':
         return 'translate3d(0, -32px, 0)';
       case 'left':
-        return 'translate3d(-32px, 0, 0)';
+        return 'translate3d(-24px, 0, 0)';
       case 'right':
-        return 'translate3d(32px, 0, 0)';
+        return 'translate3d(24px, 0, 0)';
       default:
         return 'translate3d(0, 0, 0)';
     }

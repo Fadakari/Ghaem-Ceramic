@@ -87,7 +87,7 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="جستجوی نام قطعه، شیوه پخت (کباب، استیک، خورشت...)، نوع دام یا مشخصات..."
-            className="w-full pr-12 pl-10 py-3.5 rounded-2xl border border-[#d6cebf] bg-[#faf8f5] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#9f1239] text-sm sm:text-base font-medium placeholder-gray-400 text-gray-900 transition-colors"
+            className="w-full pr-12 pl-10 py-3.5 rounded-2xl border border-[#d6cebf] bg-[#faf8f5] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#c21414] text-sm sm:text-base font-medium placeholder-gray-400 text-gray-900 transition-colors"
           />
           {searchQuery && (
             <button
@@ -113,7 +113,7 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
                   onClick={() => setSelectedAnimal(tab.key)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
                     active
-                      ? 'bg-[#9f1239] text-white shadow-xs'
+                      ? 'bg-[#c21414] text-white shadow-xs'
                       : 'bg-[#faf8f5] text-gray-700 hover:bg-[#f1ebe0] border border-[#e5dfd5]'
                   }`}
                 >
@@ -168,7 +168,7 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
       {/* Empty State */}
       {filteredProducts.length === 0 ? (
         <div className="bg-white rounded-3xl p-12 text-center border border-[#e5dfd5] space-y-4">
-          <div className="w-16 h-16 rounded-full bg-rose-50 text-[#9f1239] mx-auto flex items-center justify-center text-2xl">
+          <div className="w-16 h-16 rounded-full bg-rose-50 text-[#c21414] mx-auto flex items-center justify-center text-2xl">
             🔍
           </div>
           <h3 className="text-lg font-bold text-gray-800">
@@ -185,102 +185,100 @@ export default function ProductsClientView({ initialProducts, categories }: Prop
           </button>
         </div>
       ) : (
-        /* Products Grid - Minimalist Luxury */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        /* Products Grid - Exact Mahya-Inspired Luxury Circular Floating Showcase */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 lg:gap-20 pt-6">
           {filteredProducts.map((product) => {
             const imageSrc = getSafeImageUrl(product.image);
             return (
               <div
                 key={product.id}
-                className="card-luxury flex flex-col justify-between overflow-hidden group"
+                className="group flex flex-col items-center text-center space-y-6"
               >
-                <div>
-                  {/* Photo & Clickable Area */}
-                  <Link href={`/products/${product.slug}`} className="block relative h-60 sm:h-64 w-full bg-[#1b1c23] overflow-hidden">
+                {/* 
+                  Circular Floating Artwork Frame
+                  Instead of a box, it's a dramatic floating circle with concentric rings & soft shadow
+                */}
+                <Link
+                  href={`/products/${product.slug}`}
+                  className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-full p-2.5 bg-white border border-[#e5dfd5] group-hover:border-[#c21414] shadow-md group-hover:shadow-2xl group-hover:shadow-red-950/15 group-hover:scale-105 transition-all duration-500 block overflow-hidden cursor-pointer"
+                >
+                  {/* Inner Clipped Circle */}
+                  <div className="relative w-full h-full rounded-full overflow-hidden bg-[#1a1b20]">
                     <Image
                       src={imageSrc}
                       alt={product.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
+                      className="object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
-
-                    {/* Gradient overlay for contrast */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
-
-                    {/* Top Badges Bar - NEVER COLLIDES */}
-                    <div className="absolute top-3.5 right-3.5 left-3.5 flex items-center justify-between pointer-events-none z-10">
-                      <span className="badge-fresh shadow-md">
-                        {product.animal_type_display || product.animal_type}
-                      </span>
-                      <span className="badge-cold shadow-md">
-                        {product.temperature_state === 'chilled' ? 'گرم تازه ۰-۲°C' : 'منجمد IQF'}
-                      </span>
-                    </div>
-
-                    {/* Bottom Label on Photo */}
-                    <div className="absolute bottom-3 right-4 left-4 text-white">
-                      <div className="text-[11px] text-rose-300 font-medium">{product.cut_type}</div>
-                      <div className="text-base sm:text-lg font-black truncate group-hover:text-rose-200 transition-colors">
-                        {product.name}
-                      </div>
-                    </div>
-                  </Link>
-
-                  {/* Body Specs - Minimalist & Spacious */}
-                  <div className="p-5 sm:p-6 space-y-4">
-                    <div className="space-y-1.5 text-xs text-gray-600">
-                      <div className="flex items-start gap-1.5">
-                        <span className="font-bold text-gray-900 shrink-0">کاربرد در پخت:</span>
-                        <span className="text-gray-700 truncate">{product.suitable_for}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-gray-900 shrink-0">ماندگاری بهداشتی:</span>
-                        <span className="text-gray-700">{product.shelf_life}</span>
-                      </div>
-                    </div>
-
-                    {/* Quality Indicators: Marbling & Packaging Badge */}
-                    <div className="flex items-center justify-between pt-2 border-t border-[#f0ebe0] text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-bold text-gray-500">ماربلینگ:</span>
-                        <div className="flex items-center gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <span
-                              key={star}
-                              className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                                star <= product.marbling_score
-                                  ? 'bg-[#9f1239]'
-                                  : 'bg-gray-200'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      <span className="badge-pill-subtle">
-                        {product.packaging_type_display || 'بسته‌بندی MAP'}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                    
+                    {/* Floating Temperature Badge on Bottom of Circle */}
+                    <div className="absolute bottom-3 inset-x-0 flex justify-center">
+                      <span className="bg-black/75 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full border border-white/20 shadow-sm">
+                        {product.temperature_state === 'chilled' ? 'گرم تازه ۰ تا ۲+ °C' : 'منجمد IQF'}
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
 
-                {/* Card Actions */}
-                <div className="px-5 sm:px-6 pb-5 pt-2 flex items-center gap-2 border-t border-[#f0ebe0]/70">
+                {/* Clean Typography & Minimalist Details */}
+                <div className="space-y-3 max-w-xs mx-auto w-full">
+                  {/* Animal Type & Cut Pill */}
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-[11px] font-bold text-[#c21414] bg-red-50 px-3 py-0.5 rounded-full border border-red-100">
+                      {product.animal_type_display || product.animal_type}
+                    </span>
+                    <span className="text-[11px] text-gray-500 font-medium">
+                      {product.cut_type}
+                    </span>
+                  </div>
+
+                  {/* Product Name */}
                   <Link
                     href={`/products/${product.slug}`}
-                    className="flex-1 py-2.5 px-3 rounded-xl bg-[#17181d] hover:bg-[#252730] text-white text-xs font-bold text-center transition-colors"
+                    className="block text-lg sm:text-xl font-black text-[#111216] group-hover:text-[#c21414] transition-colors leading-snug"
                   >
-                    مشاهده مشخصات و آنالیز
+                    {product.name}
                   </Link>
 
-                  <Link
-                    href={`/contact?subject=${encodeURIComponent(product.name)}`}
-                    className="py-2.5 px-3.5 rounded-xl bg-[#9f1239] hover:bg-[#881337] text-white text-xs font-bold text-center transition-colors shadow-sm"
-                    title="استعلام خرید عمده"
-                  >
-                    استعلام تناژ
-                  </Link>
+                  {/* Culinary Usage */}
+                  <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed min-h-[32px]">
+                    {product.suitable_for
+                      ? `مناسب برای: ${product.suitable_for}`
+                      : (product.description || 'تامین مستقیم با برش بهداشتی و حفظ زنجیره سرد')}
+                  </p>
+
+                  {/* Marbling Dots */}
+                  <div className="flex items-center justify-center gap-1.5 pt-1">
+                    <span className="text-[10px] font-bold text-gray-400 ml-1">ماربلینگ:</span>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <span
+                        key={star}
+                        className={`w-2 h-2 rounded-full transition-colors ${
+                          star <= product.marbling_score
+                            ? 'bg-[#c21414]'
+                            : 'bg-gray-200'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2 flex items-center justify-center gap-2">
+                    <Link
+                      href={`/products/${product.slug}`}
+                      className="px-5 py-2.5 rounded-full bg-[#17181d] hover:bg-[#c21414] text-white text-xs font-bold transition-all duration-300 shadow-sm hover:shadow-md"
+                    >
+                      مشاهده جزئیات
+                    </Link>
+                    <Link
+                      href={`/contact?subject=${encodeURIComponent(product.name)}`}
+                      className="px-4 py-2.5 rounded-full bg-red-50 hover:bg-[#c21414] text-[#c21414] hover:text-white border border-red-200 hover:border-transparent text-xs font-bold transition-all duration-300"
+                    >
+                      استعلام عمده
+                    </Link>
+                  </div>
                 </div>
               </div>
             );

@@ -29,7 +29,9 @@ class CompanySetting(models.Model):
         default='کشتارگاه صنعتی دارای رتبه کیفی A+ و نظارت مقیم سازمان دامپزشکی',
         verbose_name='مدال/بج هیرو'
     )
-    hero_image = models.ImageField(upload_to='hero/', default='hero/hero-craft-meat.jpg', verbose_name='تصویر بخش هیرو')
+    hero_image = models.ImageField(upload_to='hero/', default='hero/hero-craft-meat.jpg', verbose_name='تصویر اول اسلایدر هیرو')
+    hero_image_2 = models.ImageField(upload_to='hero/', blank=True, null=True, verbose_name='تصویر دوم اسلایدر هیرو')
+    hero_image_3 = models.ImageField(upload_to='hero/', blank=True, null=True, verbose_name='تصویر سوم اسلایدر هیرو')
     
     # Contact & Location
     phone_primary = models.CharField(max_length=50, default='035-38200000', verbose_name='تلفن مرکزی')
@@ -65,6 +67,17 @@ class CompanySetting(models.Model):
     about_image = models.ImageField(upload_to='facilities/', default='facilities/livestock-ranch.jpg', verbose_name='تصویر درباره ما')
     facility_image = models.ImageField(upload_to='facilities/', default='facilities/cold-chain-facility.jpg', verbose_name='تصویر تاسیسات')
 
+    # Wholesale / B2B Section
+    wholesale_title = models.CharField(
+        max_length=250,
+        default='نیاز به تامین عمده پروتئین یا عقد قرارداد سازمانی دارید؟',
+        verbose_name='تیتر بنر تامین عمده'
+    )
+    wholesale_subtitle = models.TextField(
+        default='کارشناسان بازرگانی بی‌سان سام یزد آماده پاسخگویی به استعلام تناژ، ارسال نمونه و تدوین قراردادهای بلندمدت با نرخ رسمی هستند.',
+        verbose_name='زیرتیتر بنر تامین عمده'
+    )
+
     class Meta:
         verbose_name = 'تنظیمات شرکت و سایت'
         verbose_name_plural = 'تنظیمات شرکت و سایت'
@@ -79,8 +92,10 @@ class ProductCategory(models.Model):
     """
     name = models.CharField(max_length=150, verbose_name='نام دسته‌بندی')
     slug = models.SlugField(max_length=150, unique=True, allow_unicode=True, verbose_name='اسلاگ URL')
+    subtitle = models.CharField(max_length=200, blank=True, default='', verbose_name='زیرعنوان نمایشی')
     description = models.TextField(blank=True, verbose_name='توضیحات کوتاه')
     icon = models.CharField(max_length=50, default='meat', verbose_name='آیکون کلیدی')
+    image = models.ImageField(upload_to='categories/', blank=True, null=True, verbose_name='تصویر آیکون دسته‌بندی')
     order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
 
     class Meta:
@@ -90,6 +105,33 @@ class ProductCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Facility(models.Model):
+    """
+    خطوط فرآوری، کشتارگاه و زنجیره سرد صنعتی کارخانه
+    """
+    key_slug = models.SlugField(max_length=100, unique=True, verbose_name='شناسه کلیدی')
+    title = models.CharField(max_length=200, verbose_name='عنوان بخش/خط فرآوری')
+    subtitle = models.CharField(max_length=300, verbose_name='زیرعنوان کوتاه')
+    badge = models.CharField(max_length=100, verbose_name='نشان/مدال')
+    image = models.ImageField(upload_to='facilities/', default='facilities/facility-1.jpg', verbose_name='تصویر خط فرآوری')
+    description = models.TextField(verbose_name='شرح فرآیند و استانداردها')
+    features = models.TextField(help_text='هر ویژگی در یک خط جداگانه قرار گیرد', verbose_name='ویژگی‌های برجسته')
+    capacity = models.CharField(max_length=200, verbose_name='ظرفیت عملیاتی')
+    order = models.PositiveIntegerField(default=0, verbose_name='ترتیب نمایش')
+    is_active = models.BooleanField(default=True, verbose_name='فعال در سایت')
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'خط فرآوری و امکانات کارخانه'
+        verbose_name_plural = 'خطوط فرآوری و امکانات کارخانه'
+
+    def __str__(self):
+        return self.title
+
+    def get_features_list(self):
+        return [f.strip() for f in self.features.split('\n') if f.strip()]
 
 
 class Product(models.Model):

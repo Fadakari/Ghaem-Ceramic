@@ -34,9 +34,6 @@ export const CompanyProvider: React.FC<{
           cache: 'no-store',
           headers: {
             'Accept': 'application/json',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0',
           },
         });
         if (res.ok) {

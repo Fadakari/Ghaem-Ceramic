@@ -12,6 +12,7 @@ from .models import (
     Article,
     FAQ,
     ContactInquiry,
+    Facility,
 )
 from .serializers import (
     CompanySettingSerializer,
@@ -22,6 +23,7 @@ from .serializers import (
     ArticleSerializer,
     FAQSerializer,
     ContactInquirySerializer,
+    FacilitySerializer,
 )
 
 
@@ -49,6 +51,7 @@ class CompanyDataBundleView(APIView):
         ).data
         services = ServiceSerializer(Service.objects.all()[:6], many=True, context=context).data
         standards = QualityStandardSerializer(QualityStandard.objects.all()[:6], many=True, context=context).data
+        facilities = FacilitySerializer(Facility.objects.filter(is_active=True), many=True, context=context).data
         articles = ArticleSerializer(Article.objects.filter(is_published=True)[:6], many=True, context=context).data
         faqs = FAQSerializer(FAQ.objects.all()[:8], many=True, context=context).data
 
@@ -59,6 +62,7 @@ class CompanyDataBundleView(APIView):
             'products': all_products,
             'services': services,
             'standards': standards,
+            'facilities': facilities,
             'articles': articles,
             'faqs': faqs,
         })
